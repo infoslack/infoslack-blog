@@ -3,3 +3,4 @@ markdown: rdiscount
 permalink: /:categories/:title
 pygments: true
 destination: ./_deploy
+exclude: README.md
