@@ -14,8 +14,7 @@ html, body { height: 100%; }
 
 body {
   background-color: #FFF;
-  font: 13.34px Helvetica, Arial, sans-serif;
-  font-size: small;
+  font-family: "freight-micro-pro", serif;
   text-align: center;
 }
 
@@ -24,10 +23,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 { margin-bottom: 1em; }
 p { margin: 1em 0; }
-
-a         { color: #00a; }
-a:hover   { color: #000; }
-a:visited { color: #a0a; }
+code { font-family: "anonymous-pro"; }
 
 /*****************************************************************************/
 /*
@@ -57,17 +53,37 @@ ul.posts span {
 /*****************************************************************************/
 
 .site {
-  font-size: 115%;
+  font-size: 1.2em;
   text-align: justify;
   width: 42em;
   margin: 3em auto 2em;
   line-height: 1.5em;
+  color: #666;
+}
+
+a {
+  color: #3888AD;
+  text-decoration: none;
+  font-weight: bold;
+  font-style: none;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+
+a:hover {
+  color: #000;
+  background-color: #F5E498;
 }
 
 .site .header a {
+  font-family: "anonymous-pro", sans-serif;
   font-weight: bold;
   text-decoration: none;
-  font-size: 1.1em;
+  font-size: 1.3em;
+  font-style: normal;
+  background-color: transparent;
 }
 
 .site .header h1.title {
@@ -80,7 +96,7 @@ ul.posts span {
 }
 
 .site .header h1.title a:hover {
-  color: #f0aeae;
+  text-shadow: rgba(0, 0, 0, 0.6) 1px 1px 6px;
 }
 
 .site h2 {
@@ -88,12 +104,12 @@ ul.posts span {
 }
 
 .site .header a.extra {
-  color: #555;
+  color: #3888AD;
   margin-left: 1em;
 }
 
 .site .header a.extra:hover {
-  color: #aaa;
+  text-shadow: rgba(0, 0, 0, 0.6) 1px 1px 6px;
 }
 
 .site .meta {
@@ -103,7 +119,7 @@ ul.posts span {
 .site .footer {
   font-size: 80%;
   color: #666;
-  border-top: 4px solid #eee;
+  border-top: 2px solid #eee;
   margin-top: 2em;
   overflow: hidden;
 }
