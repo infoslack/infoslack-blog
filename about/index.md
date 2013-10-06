@@ -4,7 +4,7 @@ title: Daniel Romero
 keywords: infoslack, linux, software, developer, engineer, hacker
 ---
 
-![Daniel Romero](/images/daniel.jpg)
+![Daniel Romero](/images/daniel.png)
 
 ## Olá, meu nome é Daniel Romero!
 
@@ -15,7 +15,6 @@ foco em segurança de aplicações web.
 
 ## Onde estou ?
 
-[Github](https://github.com/infoslack) |
-[Linkedin](http://www.linkedin.com/in/infoslack) |
-[Twitter](https://twitter.com/infoslack) |
-[Coderwall](https://coderwall.com/infoslack)
+<a href="https://github.com/infoslack"><i class="icon-github-alt icon-large"></i></a> |
+<a href="http://www.linkedin.com/in/infoslack"><i class="icon-linkedin icon-large"></i></a> |
+<a href="https://twitter.com/infoslack"><i class="icon-twitter icon-large"></i></a>
