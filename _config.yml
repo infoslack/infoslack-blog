@@ -4,3 +4,6 @@ permalink: /:categories/:title
 pygments: true
 destination: ./_deploy
 exclude: [README.md, Capfile, config]
+jekyll-press:
+  css_options: {}
+  html_options: {}
