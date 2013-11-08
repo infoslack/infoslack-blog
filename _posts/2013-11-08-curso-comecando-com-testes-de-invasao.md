@@ -17,6 +17,7 @@ e quantificar os riscos e nível de exposição.
 
 [Daniel Romero](http://infoslack.com/about/) tem mais de 10 anos de experiência com Linux e trabalha com
 desenvolvimento de software desde 2006. Foi de PHP e Java, atualmente trabalha com Ruby.
+
 Autor do livro "[Começando com o Linux: Comandos, serviços e administração](http://www.casadocodigo.com.br/products/livro-linux)".
 É também fundador da [Initsec](http://www.initsec.com/), onde oferece serviços com foco em
 segurança de aplicações web.
