@@ -69,6 +69,25 @@ segurança de aplicações web.
 ### Pré-requisitos
 Conhecimentos em Linux, TCP/IP e desenvolvimento web.
 
-### Inscrições
+### Informações
+O curso será realizado de segunda a sexta: **06/01/14** a **15/01/14**
 
-Breve mais informações!
+Horário: das **20h às 23h**, horário de Brasília
+
+Ambiente: [TreinaTOM](http://www.treinatom.com.br/pt/)
+
+Carga horária: **24(horas)**
+
+Valor: **R$ 600,00**
+
+Vagas limitadas!
+
+### Inscreva-se
+Até o dia **25/11/13** valor promocional de **R$ 520,00**!
+
+<form target="pagseguro" action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
+  <input type="hidden" name="itemCode" value="6AA01941B6B6435444FF5FB9B1A6A8F2" />
+  <input type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/209x48-pagar-azul-assina.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
+</form>
+
+Pague com boleto bancário, para saber mais envie e-mail para: <daniel@initsec.com>
