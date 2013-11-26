@@ -83,10 +83,10 @@ Valor: **R$ 600,00**
 Vagas limitadas!
 
 ### Inscreva-se
-Até o dia **25/11/13** valor promocional de **R$ 520,00**!
+<strike>Até o dia **25/11/13** valor promocional de **R$ 520,00**!</strike>
 
 <form target="pagseguro" action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
-  <input type="hidden" name="itemCode" value="6AA01941B6B6435444FF5FB9B1A6A8F2" />
+  <input type="hidden" name="itemCode" value="4401EDC0FFFF152DD43A7F9620C9A3A1" />
   <input type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/209x48-pagar-azul-assina.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
 </form>
 
