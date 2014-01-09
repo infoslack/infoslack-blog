@@ -70,7 +70,7 @@ segurança de aplicações web.
 Conhecimentos em Linux, TCP/IP e desenvolvimento web.
 
 ### Informações
-O curso será realizado de segunda a sexta: **06/01/14** a **15/01/14**
+<strike>O curso será realizado de segunda a sexta: **06/01/14** a **15/01/14**</strike>
 
 Horário: das **20h às 23h**, horário de Brasília
 
@@ -84,10 +84,3 @@ Vagas limitadas!
 
 ### Inscreva-se
 <strike>Até o dia **25/11/13** valor promocional de **R$ 520,00**!</strike>
-
-<form target="pagseguro" action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
-  <input type="hidden" name="itemCode" value="4401EDC0FFFF152DD43A7F9620C9A3A1" />
-  <input type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/209x48-pagar-azul-assina.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
-</form>
-
-Pague com boleto bancário, para saber mais envie e-mail para: <daniel@initsec.com>
