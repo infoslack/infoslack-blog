@@ -4,7 +4,7 @@ title: Daniel Romero
 keywords: infoslack, linux, software, developer, engineer, hacker
 ---
 
-![Daniel Romero](/images/daniel.png)
+<p align="center"><img src="/images/daniel.png" alt="Daniel Romero" /></p>
 
 ## Olá, meu nome é Daniel Romero!
 
