@@ -28,7 +28,7 @@ Your identification has been saved in ~/.ssh/id_rsa.
 Your public key has been saved in ~/.ssh/id_rsa.pub.
 The key fingerprint is:
 98:50:29:f1:15:1a:42:3c:76:9f:5e:c9:2b:26:ce:8d infoslack@l33t
-The key's randomart image is:
+The keys randomart image is:
 +--[ RSA 4096]----+
 |   o+.o.o.       |
 |    =+o+         |
@@ -48,7 +48,7 @@ uma vez, fiz um loop na minha lista de servers para atualizar o `authorized_keys
 de cada máquina:
 
 {% highlight bash %}
-$ for host in `cat .ssh/config | grep '^Host ' | sed 's/Host //'`;
+$ for host in `cat ~/.ssh/config | grep '^Host ' | sed 's/Host //'`;
 > do scp ~/configs/authorized_keys $host:.ssh/; done
 $
 {% endhighlight %}
