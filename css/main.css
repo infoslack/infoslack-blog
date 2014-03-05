@@ -190,3 +190,7 @@ a:hover {
 .post h3 {
   font-size: 1.2em;
 }
+
+.read-more li {
+  list-style-type: none;
+}
