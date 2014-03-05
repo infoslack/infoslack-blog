@@ -16,6 +16,6 @@ um livro ["Começando com o Linux: Comandos, serviços e administração"](http:
 
 ## Onde estou ?
 
-<a href="https://github.com/infoslack"><i class="icon-github-alt icon-large"></i></a> |
-<a href="http://www.linkedin.com/in/infoslack"><i class="icon-linkedin icon-large"></i></a> |
-<a href="https://twitter.com/infoslack"><i class="icon-twitter icon-large"></i></a>
+<a href="https://github.com/infoslack"><i class="fa fa-github-alt fa-2x"></i></a> |
+<a href="http://www.linkedin.com/in/infoslack"><i class="fa fa-linkedin fa-2x"></i></a> |
+<a href="https://twitter.com/infoslack"><i class="fa fa-twitter fa-2x"></i></a>
