@@ -18,7 +18,7 @@ Pensando nesse problema podemos pedir para que o servidor leia um [gist](https:/
 as informações necessárias para que essa tarefa seja realizada de forma mais
 prática.
 
-Para isso vamos precisar criar um gist de preferência privado com a lista das
+Para isso vamos precisar criar um gist de preferência **privado** com a lista das
 chaves públicas de quem deve ser inserido nas configurações como mostra o exemplo:
 
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5OnYust5S9hwLb4tAtVMOVlRmszam...
@@ -80,6 +80,13 @@ E o *cron* ficaria assim:
 {% highlight powershell %}
 0 0 * * * /opt/scripts/update_authorized_keys.sh
 {% endhighlight %}
+
+E o gist teria a **whitelist** dos usuários:
+
+    infoslack
+    initsec
+    daniel_romero
+    ...
 
 O tempo do cron poderia ser ajustado para intervalos menores ou você poderia
 até mesmo fazer algo legal com o monit.
