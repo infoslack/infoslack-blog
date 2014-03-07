@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Atualize o authorized_keys no servidor usando gist"
+title: "Gerencie chaves públicas no servidor com gist"
 category: server
 keywords: server, linux, unix, services, servidor, gist, github, ssh, keys
 ---
