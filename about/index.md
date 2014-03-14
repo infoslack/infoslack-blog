@@ -14,6 +14,10 @@ empresa chamada [Initsec](http://initsec.com) onde ofereço alguns serviços com
 foco em segurança de aplicações web. Meu desafio mais recente foi escrever
 um livro ["Começando com o Linux: Comandos, serviços e administração"](http://www.casadocodigo.com.br/products/livro-linux).
 
+## [infoslack@gmail.com](mailto:infoslack@gmail.com)
+
+**Para privacidade:** [GPG key](/about/gpg-key.txt)
+
 ## Onde estou ?
 
 <a href="https://github.com/infoslack"><i class="fa fa-github-alt fa-2x"></i></a> |
