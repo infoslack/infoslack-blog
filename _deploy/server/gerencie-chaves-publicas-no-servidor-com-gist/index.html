@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Daniel Romero" />
+    <meta name="description" content="Gerencie chaves públicas no servidor com gist"/>
+    <meta name="keywords" content="server, linux, unix, services, servidor, gist, github, ssh, keys"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="-hEvNN86IOrYXeIdV4odleriXAkBE5PAV_Peb2niNZw" />
+    <title>Gerencie chaves públicas no servidor com gist</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <script type="text/javascript" src="//use.typekit.net/yed8yuc.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">root@infoslack:~#</a></h1>
+        <a class="extra" href="/">home</a>
+        <a class="extra" href="/livro">livro</a>
+        <a class="extra" href="/about">about</a>
+        <a class="extra" href="http://infoslack.com/atom.xml"><i class="fa fa-rss"></i></a>
+      </div>
+
+      <h2>Gerencie chaves públicas no servidor com gist</h2>
+<p class="meta">07/03/2014</p>
+
+<div class="post">
+<p>Imagine que você está trabalhando com sua equipe no desenvolvimento de um novo
+produto e te pediram para configurar um servidor de testes para rodar o projeto.</p>
+
+<p>Acontece que após a instalação e configuração do server você recebe o pedido de
+um amigo do time para que adicione a chave pública dele no <code>authorized_keys</code>,
+não é incômodo, depois de alguns dias outro amigo faz o mesmo pedido e o primeiro
+que te pediu teve que reinstalar o sistema e esqueceu de fazer backup das chaves
+e agora a tarefa de atualizar o <code>authorized_keys</code> começa a virar tortura.</p>
+
+<p>Pensando nesse problema podemos pedir para que o servidor leia um <a href="https://gist.github.com/">gist</a> com
+as informações necessárias para que essa tarefa seja realizada de forma mais
+prática.</p>
+
+<p>Para isso vamos precisar criar um gist de preferência <strong>privado</strong> com a lista das
+chaves públicas de quem deve ser inserido nas configurações como mostra o exemplo:</p>
+
+<pre><code>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5OnYust5S9hwLb4tAtVMOVlRmszam...
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCgRjYuFXqVv1x0WHnNxz3s4doTpx7v...
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsizI0Nt5wMunAYd2t3daTxnHZBMlW...
+</code></pre>
+
+<p>Feito isso vamos ao servidor configurar o <strong>cron</strong> para que faça a atualização
+de forma automática, <code>$ sudo crontab -e</code>:</p>
+
+<div class="highlight"><pre><code class="powershell"><span class="n">0</span> <span class="n">0</span> <span class="p">*</span> <span class="p">*</span> <span class="p">*</span> <span class="n">mkdir</span> <span class="n">-pm</span> <span class="n">700</span> <span class="p">~/.</span><span class="n">ssh</span> <span class="p">&gt;</span> <span class="p">/</span><span class="n">dev</span><span class="p">/</span><span class="n">null</span> <span class="n">2</span><span class="p">&gt;&amp;</span><span class="n">1</span> <span class="p">;</span> <span class="n">curl</span> <span class="n">-s</span> <span class="n">-w</span> <span class="p">\%{</span><span class="n">http_code</span><span class="p">}</span> <span class="p">\</span>
+<span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">gist</span><span class="p">.</span><span class="n">githubusercontent</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">infoslack</span><span class="p">/</span><span class="n">867c9e934af23ee8ae6e</span><span class="p">/</span><span class="n">raw</span><span class="p">/\</span>
+<span class="n">9cde7b86acdda0a3f4d74ee801e4a7bae57f2a08</span><span class="p">/</span><span class="n">keys_white_list</span> <span class="p">-</span><span class="n">-output</span> <span class="p">\</span>
+<span class="p">~/.</span><span class="n">ssh</span><span class="p">/</span><span class="n">authorized_keys_dl</span> <span class="n">2</span><span class="p">&gt;</span> <span class="p">/</span><span class="n">dev</span><span class="p">/</span><span class="n">null</span> <span class="p">|</span> <span class="n">grep</span> <span class="n">200</span> <span class="p">&gt;</span> <span class="p">/</span><span class="n">dev</span><span class="p">/</span><span class="n">null</span> <span class="p">&amp;&amp;</span> <span class="n">mv</span> <span class="o">-f</span> <span class="p">\</span>
+<span class="p">~/.</span><span class="n">ssh</span><span class="p">/</span><span class="n">authorized_keys_dl</span> <span class="p">~/.</span><span class="n">ssh</span><span class="p">/</span><span class="n">authorized_keys</span> <span class="p">&amp;&amp;</span> <span class="n">chmod</span> <span class="n">600</span> <span class="p">\</span>
+<span class="p">~/.</span><span class="n">ssh</span><span class="p">/</span><span class="n">authorized_keys</span> <span class="p">&gt;</span> <span class="p">/</span><span class="n">dev</span><span class="p">/</span><span class="n">null</span> <span class="n">2</span><span class="p">&gt;&amp;</span><span class="n">1</span>
+</code></pre></div>
+
+
+<p>Ok é assustador, mas vamos entender esse comando feio primeiro, estou informando
+para o cron que todo dia a meia-noite ele crie o diretório <code>~/.ssh</code> com a
+permissão 700 e caso o diretório já exista que mantenha a sua estrutura, em seguida
+estamos redirecionando as mensagens de erro para <code>/dev/null</code> depois disso o <strong>curl</strong>
+entra em ação pegando as informações no nosso gist e salvando em um arquivo com
+o nome de <code>authorized_keys_dl</code> onde mais uma vez as mensagens de erro são ignoradas,
+como passamos um argumento para o <strong>curl</strong> adicionar ao final do arquivo o status
+http da url, fazemos um grep para verificar se está ok, caso não venha esse código
+mas um outro como <em>404</em> a atualização será interrompida.
+Depois disso movemos o arquivo baixado para o nome correto <code>authorized_keys</code> e
+alteramos a permissão para 600, sempre enviando o <code>stderr</code> para <code>/dev/null</code>.</p>
+
+<p>Agora que entendemos o que está sendo feito, vamos melhorar essa instrução.
+Podemos elaborar um <em>shell script</em> bastante reduzido e claro mais legível, mas
+antes vamos dar uma olhada em uma feature legal que o github oferece, que é
+exibir as chaves públicas dos usuários, simples assim:
+<a href="https://github.com/infoslack.keys">https://github.com/infoslack.keys</a>.</p>
+
+<p>Dessa forma em vez de manter um gist com todas as chaves públicas, podemos ter
+uma lista de usuários, nosso script ficaria assim:</p>
+
+<div class="highlight"><pre><code class="powershell"><span class="c">#!/bin/sh</span>
+
+<span class="n">URL</span><span class="p">=</span><span class="s2">&quot;RAW_URL_PRIVATE_GIST&quot;</span>
+<span class="n">TMP</span><span class="p">=</span><span class="s2">&quot;/tmp/authorized_keys_dl&quot;</span>
+<span class="n">ERR</span><span class="p">=</span><span class="s2">&quot;/dev/null 2&gt;&amp;1&quot;</span>
+
+<span class="n">mkdir</span> <span class="n">-pm</span> <span class="n">700</span> <span class="p">~/.</span><span class="n">ssh</span> <span class="p">&gt;</span> <span class="nv">$ERR</span>
+
+<span class="k">for</span> <span class="n">user</span> <span class="k">in</span> <span class="p">$(</span><span class="n">curl</span> <span class="p">-</span><span class="n">-silent</span> <span class="nv">$URL</span><span class="p">)</span>
+<span class="k">do</span>
+  <span class="n">curl</span> <span class="n">-s</span> <span class="s2">&quot;https://github.com/&quot;</span><span class="nv">$user</span><span class="s2">&quot;.keys&quot;</span> <span class="n">-w</span> <span class="s2">&quot;\n&quot;</span> <span class="p">&gt;&gt;</span> <span class="nv">$TMP</span>
+<span class="n">done</span>
+
+<span class="n">mv</span> <span class="o">-f</span> <span class="nv">$TMP</span> <span class="p">~/.</span><span class="n">ssh</span><span class="p">/</span><span class="n">authorized_keys</span> <span class="p">&amp;&amp;</span> <span class="n">chmod</span> <span class="n">600</span> <span class="p">~/.</span><span class="n">ssh</span><span class="p">/</span><span class="n">authorized_keys</span> <span class="p">&gt;</span> <span class="nv">$ERR</span>
+</code></pre></div>
+
+
+<p>E o <em>cron</em> ficaria assim:</p>
+
+<div class="highlight"><pre><code class="powershell"><span class="n">0</span> <span class="n">0</span> <span class="p">*</span> <span class="p">*</span> <span class="p">*</span> <span class="p">/</span><span class="n">opt</span><span class="p">/</span><span class="n">scripts</span><span class="p">/</span><span class="n">update_authorized_keys</span><span class="p">.</span><span class="n">sh</span>
+</code></pre></div>
+
+
+<p>E o gist teria a <strong>whitelist</strong> dos usuários:</p>
+
+<pre><code>infoslack
+initsec
+daniel_romero
+...
+</code></pre>
+
+<p>O tempo do cron poderia ser ajustado para intervalos menores ou você poderia
+até mesmo fazer algo legal com o monit.</p>
+
+<p>Happy Hacking ;)</p>
+
+</div>
+<br />
+<section class="read-more">
+  <h3>Leia também</h3>
+  <ul>
+    
+    <li>
+      <span>04/11/2013</span> &raquo;
+      <a href="/linux/compilando-o-kernel-linux">Compilando o Kernel Linux</a>
+    </li>
+    
+    <li>
+      <span>04/03/2014</span> &raquo;
+      <a href="/security/criando-uma-comunicacao-segura-com-openvpn">Criando uma comunicação segura com OpenVPN</a>
+    </li>
+    
+    <li>
+      <span>22/11/2013</span> &raquo;
+      <a href="/security/conheca-o-metasploit-framework">Conheça o Metasploit Framework</a>
+    </li>
+    
+  </ul>
+</section>
+<br />
+<section>
+  <h3>Comentários</h3>
+  <div id="disqus_thread" aria-live="polite">
+    <script type="text/javascript">
+  var disqus_shortname = 'infoslack';
+
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://infoslack.disqus.com/embed.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+
+  </div>
+</section>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+            Copyright © 2013 - 2014
+          </p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44190365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>

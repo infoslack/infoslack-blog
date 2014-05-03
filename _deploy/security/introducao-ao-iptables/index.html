@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Daniel Romero" />
+    <meta name="description" content="Introdução ao iptables"/>
+    <meta name="keywords" content="linux, security, segurança, firewall"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="-hEvNN86IOrYXeIdV4odleriXAkBE5PAV_Peb2niNZw" />
+    <title>Introdução ao iptables</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <script type="text/javascript" src="//use.typekit.net/yed8yuc.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">root@infoslack:~#</a></h1>
+        <a class="extra" href="/">home</a>
+        <a class="extra" href="/livro">livro</a>
+        <a class="extra" href="/about">about</a>
+        <a class="extra" href="http://infoslack.com/atom.xml"><i class="fa fa-rss"></i></a>
+      </div>
+
+      <h2>Introdução ao iptables</h2>
+<p class="meta">19/11/2013</p>
+
+<div class="post">
+<h3>O que é o iptables ?</h3>
+
+<p><a href="http://netfilter.org/">Netfilter</a> é o firewall padrão embutido no kernel linux,
+sua função é tratar regras aplicadas a pacotes TCP-IP.
+O <a href="http://www.netfilter.org/projects/iptables/">iptables</a> nada mais é que uma interface controladora do Netfilter.</p>
+
+<h3>Entendendo as regras</h3>
+
+<p>Para gerenciar o tratamento das regras e aplicar aos pacotes o iptables conta
+com tabelas e chains.</p>
+
+<p>As tabelas servem para armazenar as chains. Chains são regras para especificar
+o tratamento dos pacotes.</p>
+
+<p>O iptables possuí 4 tabelas:</p>
+
+<ul>
+<li><strong>nat</strong> - tabela padrão usada quando existe comunicação <a href="http://en.wikipedia.org/wiki/Network_address_translation">NAT</a>;</li>
+<li><strong>filter</strong> - tabela padrão para tráfego de dados comum com NAT;</li>
+<li><strong>mangle</strong> - tabela para regras especiais de pacotes;</li>
+</ul>
+
+
+<p>A tabela <code>filter</code> é composta pelas seguintes chains:</p>
+
+<ul>
+<li><strong>INPUT</strong> - define regras de entrada de pacotes;</li>
+<li><strong>OUTPUT</strong> - são regras para saída de pacotes;</li>
+<li><strong>FORWARD</strong> - regras para pacotes que passam pelo firewall;</li>
+</ul>
+
+
+<p>Já as chains da tabela <code>nat</code> são:</p>
+
+<ul>
+<li><strong>PREROUTING</strong> - regra para processar pacotes antes do roteamento feito pelo firewall;</li>
+<li><strong>POSTROUTING</strong> - regra para processar pacotes depois do roteamento feito pelo firewall;</li>
+<li><strong>OUTPUT</strong> - regras para saída de pacotes;
+<br>
+
+<h3>Aplicando regras e determinando ações</h3></li>
+</ul>
+
+
+<p>Das opções mais utilizadas para aplicar regras na sintaxe do iptables temos:</p>
+
+<ul>
+<li><code>-s</code> serve para especificar a origem do pacote, EX: <code>-s 192.168.0.1</code></li>
+<li><code>-d</code> serve para especificar o destino do pacote, EX: <code>-d 192.168.0.5</code></li>
+<li><code>-i</code> serve para identificar a interface de entrada do pacote, EX: <code>-i eth0</code></li>
+<li><code>-o</code> serve para identificar a interface de saída do pacote, EX: <code>-o eth1</code>;</li>
+<li><code>-p</code> serve para especificar o protocolo usado na regra, EX: <code>-p tcp</code> ou <code>-p udp</code></li>
+</ul>
+
+
+<p>Para definir as ações usa-se o parâmetro <code>-j</code>:</p>
+
+<ul>
+<li><strong>ACCEPT</strong> - aceita o pacote e o processamento da regra é concluído;</li>
+<li><strong>DROP</strong> - apenas rejeita o pacote;</li>
+<li><strong>REJECT</strong> - rejeita o pacote e envia um aviso;</li>
+<li><strong>LOG</strong> - envia mensagem para o <code>syslog</code> gravando informações sobre pacotes aceitos ou rejeitados;</li>
+</ul>
+
+
+<p>As opções são muitas, para ver todas detalhadamente consulte a documentação.</p>
+
+<p>Ao implementar as regras do firewall podemos e devemos adotar políticas. As políticas
+são um conjunto de condições que definem o bloqueio ou a liberação de tráfego de dados.
+No caso do iptables o parâmetro <code>-P</code> define isso.</p>
+
+<p>No exemplo abaixo estou negando todo o tráfego para as regras de <code>INPUT</code>, <code>OUTPUT</code> e
+<code>FORWARD</code> da tabela <code>filter</code> ou seja estou bloqueando todas as regras para entrada e
+saída de pacotes na minha máquina.</p>
+
+<div class="highlight"><pre><code class="powershell"><span class="n">iptables</span> <span class="n">-P</span> <span class="n">INPUT</span> <span class="n">DROP</span>
+<span class="n">iptables</span> <span class="n">-P</span> <span class="n">OUTPUT</span> <span class="n">DROP</span>
+<span class="n">iptables</span> <span class="n">-P</span> <span class="n">FORWARD</span> <span class="n">DROP</span>
+</code></pre></div>
+
+
+<p>Para verificar regras que foram definidas usamos o parâmetro <code>-L</code> e para zerar
+as regras <code>-R</code>.</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>iptables -L
+Chain INPUT <span class="o">(</span>policy DROP<span class="o">)</span>
+target     prot opt <span class="nb">source               </span>destination
+
+Chain FORWARD <span class="o">(</span>policy DROP<span class="o">)</span>
+target     prot opt <span class="nb">source               </span>destination
+
+Chain OUTPUT <span class="o">(</span>policy DROP<span class="o">)</span>
+target     prot opt <span class="nb">source               </span>destination
+</code></pre></div>
+
+
+<p>Testando o firewall, podemos dar um ping na nossa máquina:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>ping localhost
+PING localhost <span class="o">(</span>127.0.0.1<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+ping: sendmsg: Operation not permitted
+</code></pre></div>
+
+
+<p>Como a política foi escrita para negar tudo, vamos definir uma exceção para nossa
+própria máquina liberando o tráfego de pacotes para a interface <a href="http://en.wikipedia.org/wiki/Loopback">loopback</a>:</p>
+
+<div class="highlight"><pre><code class="powershell"><span class="n">iptables</span> <span class="n">-A</span> <span class="n">OUTPUT</span> <span class="n">-d</span> <span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span> <span class="n">-j</span> <span class="n">ACCEPT</span>
+<span class="n">iptables</span> <span class="n">-A</span> <span class="n">INPUT</span> <span class="n">-d</span> <span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span> <span class="n">-j</span> <span class="n">ACCEPT</span>
+</code></pre></div>
+
+
+<p>Agora se efetuarmos o mesmo teste anterior é possível obter resposta do ping:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>ping localhost
+PING localhost <span class="o">(</span>127.0.0.1<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+64 bytes from localhost <span class="o">(</span>127.0.0.1<span class="o">)</span>: <span class="nv">icmp_seq</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>0.036 ms
+64 bytes from localhost <span class="o">(</span>127.0.0.1<span class="o">)</span>: <span class="nv">icmp_seq</span><span class="o">=</span>2 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>0.043 ms
+...
+</code></pre></div>
+
+
+<p>Um exemplo de script simples de iptables poderia ser assim:</p>
+
+<div class="highlight"><pre><code class="powershell"><span class="c">#!/bin/bash</span>
+
+<span class="c"># definindo política padrão</span>
+<span class="n">iptables</span> <span class="n">-P</span> <span class="n">INPUT</span> <span class="n">DROP</span>
+<span class="n">iptables</span> <span class="n">-P</span> <span class="n">OUTPUT</span> <span class="n">ACCEPT</span>
+<span class="n">iptables</span> <span class="n">-P</span> <span class="n">FORWARD</span> <span class="n">DROP</span>
+
+<span class="c"># configurações para regras de entrada</span>
+<span class="n">iptables</span> <span class="n">-A</span> <span class="n">INPUT</span> <span class="n">-i</span> <span class="n">lo</span> <span class="n">-j</span> <span class="n">ACCEPT</span>
+<span class="n">iptables</span> <span class="n">-A</span> <span class="n">INPUT</span> <span class="n">-p</span> <span class="n">icmp</span> <span class="p">-</span><span class="n">-icmp-type</span> <span class="n">echo-request</span> <span class="n">-m</span> <span class="n">limit</span> <span class="p">-</span><span class="n">-limit</span> <span class="n">1</span><span class="p">/</span><span class="n">s</span> <span class="n">-j</span> <span class="n">ACCEPT</span>
+<span class="n">iptables</span> <span class="n">-A</span> <span class="n">INPUT</span> <span class="n">-p</span> <span class="n">icmp</span> <span class="p">-</span><span class="n">-icmp-type</span> <span class="n">echo-reply</span> <span class="n">-j</span> <span class="n">ACCEPT</span>
+</code></pre></div>
+
+
+<p>Basicamente as regras de <code>INPUT</code> e <code>FORWARD</code> estão bloqueadas e tudo o que sair
+da máquina será liberado.</p>
+
+<h3>Concluindo</h3>
+
+<p>O que vimos é o básico, uma parte teórica do funcionamento do iptables,
+existe uma infinidade de outros comandos e muitas opções que podem ser exploradas.</p>
+
+<p>Em servidores gosto de soluções mais práticas para configurar o iptables,
+como é o caso do <a href="https://help.ubuntu.com/community/UFW">UFW (Uncomplicated Firewall)</a>
+que basicamente funciona como uma interface amigável na linha de comando para
+gerar as regras do iptables.</p>
+
+</div>
+<br />
+<section class="read-more">
+  <h3>Leia também</h3>
+  <ul>
+    
+    <li>
+      <span>04/03/2014</span> &raquo;
+      <a href="/security/criando-uma-comunicacao-segura-com-openvpn">Criando uma comunicação segura com OpenVPN</a>
+    </li>
+    
+    <li>
+      <span>04/11/2013</span> &raquo;
+      <a href="/linux/compilando-o-kernel-linux">Compilando o Kernel Linux</a>
+    </li>
+    
+    <li>
+      <span>22/11/2013</span> &raquo;
+      <a href="/security/conheca-o-metasploit-framework">Conheça o Metasploit Framework</a>
+    </li>
+    
+  </ul>
+</section>
+<br />
+<section>
+  <h3>Comentários</h3>
+  <div id="disqus_thread" aria-live="polite">
+    <script type="text/javascript">
+  var disqus_shortname = 'infoslack';
+
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://infoslack.disqus.com/embed.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+
+  </div>
+</section>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+            Copyright © 2013 - 2014
+          </p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44190365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>
