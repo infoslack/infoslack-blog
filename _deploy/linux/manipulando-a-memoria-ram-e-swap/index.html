@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Daniel Romero" />
+    <meta name="description" content="Manipulando a memória RAM e a SWAP"/>
+    <meta name="keywords" content="linux, ram, swap, kernel"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="-hEvNN86IOrYXeIdV4odleriXAkBE5PAV_Peb2niNZw" />
+    <title>Manipulando a memória RAM e a SWAP</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <script type="text/javascript" src="//use.typekit.net/yed8yuc.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">root@infoslack:~#</a></h1>
+        <a class="extra" href="/">home</a>
+        <a class="extra" href="/livro">livro</a>
+        <a class="extra" href="/about">about</a>
+        <a class="extra" href="http://infoslack.com/atom.xml"><i class="fa fa-rss"></i></a>
+      </div>
+
+      <h2>Manipulando a memória RAM e a SWAP</h2>
+<p class="meta">21/09/2013</p>
+
+<div class="post">
+<p>Alguma vez você já precisou limpar o cache da memória RAM ou SWAP no linux ?</p>
+
+<p>O Linux utiliza o espaço na memória cache para salvar programas e comandos que foram utilizados recentemente, isso permite executá-los mais rapidamente no futuro. É interessante saber manipular esse espaço na memória, vejamos como:</p>
+
+<h3>Limpando o cache da RAM</h3>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sync
+<span class="nv">$ </span><span class="nb">echo </span>3 &gt; /proc/sys/vm/drop_caches
+</code></pre></div>
+
+
+<p>Ou podemos usar o <code>sysctl</code> para configurar parâmetros de kernel em runtime:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sysctl vm.drop_caches<span class="o">=</span>3
+</code></pre></div>
+
+
+<p><br />
+* o <code>sync</code> faz com que todos os arquivos de cache do sistema sejam descarregados da memória e armazenados em disco, assim não perdemos os dados que estão na RAM
+* a opção <code>3</code> faz o kernel liberar pagecache, dentries e inodes
+* outras opções: <code>1</code> faz o kernel liberar somente pagecache, <code>2</code> libera inodes e pagecache
+* para saber mais: <a href="http://linux-mm.org/Drop_Caches">Drop Caches</a> e <a href="https://www.kernel.org/doc/Documentation/sysctl/vm.txt">Sysctl vm</a>
+<br /></p>
+
+<h3>Controlando a SWAP</h3>
+
+<p>É possível configurar e controlar o comportamento da SWAP através de um parâmetro do kernel no arquivo <code>/proc/sys/vm/swappiness</code>. Este arquivo contém um número de 0 a 100, onde o sistema determina a predisposição para fazer uso da SWAP.</p>
+
+<p>Um número baixo faz com que ele use a SWAP apenas em situações extremas, enquanto que um número maior aumenta o uso de SWAP e mantém a memória RAM com mais espaço livre.</p>
+
+<p>Aumentar ou diminuir o uso de SWAP:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;90&quot;</span> &gt; /proc/sys/vm/swappiness
+<span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;10&quot;</span> &gt; /proc/sys/vm/swappiness
+</code></pre></div>
+
+
+<p>ou use o <code>sysctl</code> para passar esses parâmetros de kernel em runtime</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sysctl vm.swappiness<span class="o">=</span>20
+</code></pre></div>
+
+
+<p>No final lembre-se de resetar a SWAP para validar as configurações:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>swapoff -a
+<span class="nv">$ </span>swapon -a
+</code></pre></div>
+
+
+
+
+</div>
+<br />
+<section class="read-more">
+  <h3>Leia também</h3>
+  <ul>
+    
+    <li>
+      <span>21/09/2013</span> &raquo;
+      <a href="/shell/pssh-compartilhando-o-shell-de-forma-facil">Pssh - Compartilhando o shell de forma fácil</a>
+    </li>
+    
+    <li>
+      <span>04/11/2013</span> &raquo;
+      <a href="/linux/compilando-o-kernel-linux">Compilando o Kernel Linux</a>
+    </li>
+    
+    <li>
+      <span>04/03/2014</span> &raquo;
+      <a href="/security/criando-uma-comunicacao-segura-com-openvpn">Criando uma comunicação segura com OpenVPN</a>
+    </li>
+    
+  </ul>
+</section>
+<br />
+<section>
+  <h3>Comentários</h3>
+  <div id="disqus_thread" aria-live="polite">
+    <script type="text/javascript">
+  var disqus_shortname = 'infoslack';
+
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://infoslack.disqus.com/embed.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+
+  </div>
+</section>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+            Copyright © 2013 - 2014
+          </p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44190365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>

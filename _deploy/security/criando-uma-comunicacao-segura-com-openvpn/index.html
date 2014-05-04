@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Daniel Romero" />
+    <meta name="description" content="Criando uma comunicação segura com OpenVPN"/>
+    <meta name="keywords" content="security, hacking, vpn, ,openvpn, vps, segurança, invasão, privacidade, túnel, criptografia"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="-hEvNN86IOrYXeIdV4odleriXAkBE5PAV_Peb2niNZw" />
+    <title>Criando uma comunicação segura com OpenVPN</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <script type="text/javascript" src="//use.typekit.net/yed8yuc.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">root@infoslack:~#</a></h1>
+        <a class="extra" href="/">home</a>
+        <a class="extra" href="/livro">livro</a>
+        <a class="extra" href="/about">about</a>
+        <a class="extra" href="http://infoslack.com/atom.xml"><i class="fa fa-rss"></i></a>
+      </div>
+
+      <h2>Criando uma comunicação segura com OpenVPN</h2>
+<p class="meta">04/03/2014</p>
+
+<div class="post">
+<p>Imagine que você está viajando e que chegando ao hotel a primeira coisa a fazer
+foi conectar-se ao Wi-Fi para ler seus e-mails, verificar alguma coisa no internet
+banking ou para terminar alguma tarefa pendente.</p>
+
+<p>O problema é que você nunca sabe quem está conectado na mesma rede, ou o que estão
+fazendo na rede. Pode ter alguém capturando os pacotes que trafegam ou pior pode ter
+um <a href="http://en.wikipedia.org/wiki/Packet_analyzer">sniffer</a> monitorando todas as
+conexões. Mesmo que os serviços que você utilize façam uso de <em>https</em> é possível
+ler os pacotes antes de serem criptografados fazendo uso do: <a href="https://pypi.python.org/pypi/sslstrip">SSLstrip</a>.</p>
+
+<p>A imagem abaixo reflete o cenário onde temos alguém espionando a rede, capturando
+as informações que estão trafegando:</p>
+
+<p><img src="/images/vpn-01.png" alt="Acesso inseguro" /></p>
+
+<p>A proposta para solucionar este problema é de criar uma conexão encapsulada através
+de um servidor VPN(<em>Virtual Private Network</em>), dessa forma é possível mascarar o tráfego
+proveniente do nosso computador.</p>
+
+<p>No exemplo abaixo o tráfego em túnel é uma conexão criptografada que torna impossível
+a leitura nítida das informações que trafegam:</p>
+
+<p><img src="/images/vpn-02.png" alt="Acesso seguro" /></p>
+
+<p><a href="http://openvpn.net/">OpenVPN</a>, ou (<em>Open Virtual Private Network</em>) é a ferramenta
+que utilizaremos para criar o nosso túnel de rede, ele faz uso do <a href="https://www.openssl.org/">OpenSSL</a>
+para criptografar todo o tráfego e fornecer uma conexão segura entre as máquinas,
+(cliente/servidor).</p>
+
+<p>Para esse exemplo, vou utilizar uma VPS com Ubuntu 12.04 LTS.</p>
+
+<pre><code>123.456.789.12 -&gt; representa o ip da minha máquina local.
+111.222.333.44 -&gt; representa o ip da VPS
+</code></pre>
+
+<p>Antes de começar, atualize os repositórios e pacotes instalados, em seguida instale
+o OpenVPN:</p>
+
+<div class="highlight"><pre><code class="bash">ubuntu@infoslack:~<span class="nv">$ </span>sudo apt-get update
+ubuntu@infoslack:~<span class="nv">$ </span>sudo apt-get upgrade
+ubuntu@infoslack:~<span class="nv">$ </span>sudo apt-get install openvpn
+</code></pre></div>
+
+
+<p>O OpenVPN possui ferramentas relacionadas à criptografia o <strong>easy-rsa</strong>, por padrão
+encontra-se no diretório <strong>/usr/share/doc/openvpn/examples/easy-rsa/</strong>, precisamos
+dele em <strong>/etc/openvpn</strong>:</p>
+
+<div class="highlight"><pre><code class="bash">ubuntu@infoslack:~<span class="nv">$ </span>sudo cp -R /usr/share/doc/openvpn/examples/easy-rsa/ <span class="se">\</span>
+/etc/openvpn
+</code></pre></div>
+
+
+<p>Agora, precisamos gerar a infraestrutura de chave pública, entre no diretório
+<strong>/etc/openvpn/easy-rsa/2.0/</strong>, crie um link simbólico chamado <strong>openssl.cnf</strong> de
+<strong>openssl-1.0.0.cnf</strong>, edite o script <strong>vars</strong> alterando a linha
+<em>export KEY_SIZE=1024</em> para <em>export KEY_SIZE=2048</em> pois não queremos gerar chaves
+de 1024 bits, por fim execute o script <strong>vars</strong>:</p>
+
+<div class="highlight"><pre><code class="bash">ubuntu@infoslack:~<span class="nv">$ </span><span class="nb">cd</span> /etc/openvpn/easy-rsa/2.0/
+ubuntu@infoslack:/etc/openvpn/easy-rsa/2.0<span class="nv">$ </span>sudo ln -s openssl-1.0.0.cnf <span class="se">\</span>
+openssl.cnf
+ubuntu@infoslack:/etc/openvpn/easy-rsa/2.0<span class="nv">$ </span>. /etc/openvpn/easy-rsa/2.0/vars
+</code></pre></div>
+
+
+<p>Após rodar o script <strong>vars</strong> ele retornará a seguinte mensagem:
+<strong>NOTE: If you run ./clean-all, I will be doing a rm -rf on /etc/openvpn/easy-rsa/2.0/keys</strong>.</p>
+
+<p>Execute o script <strong>clean-all</strong> e em seguida o <strong>build-ca</strong> para gerar os certificados,
+preencha as informações que forem solicitadas:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>. /etc/openvpn/easy-rsa/2.0/clean-all
+<span class="nv">$ </span>. /etc/openvpn/easy-rsa/2.0/build-ca
+Generating a 2048 bit RSA private key
+.......................................................................+++
+.+++
+writing new private key to <span class="s1">&#39;ca.key&#39;</span>
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter <span class="s1">&#39;.&#39;</span>, the field will be left blank.
+-----
+Country Name <span class="o">(</span>2 letter code<span class="o">)</span> <span class="o">[</span>US<span class="o">]</span>:
+State or Province Name <span class="o">(</span>full name<span class="o">)</span> <span class="o">[</span>CA<span class="o">]</span>:
+Locality Name <span class="o">(</span>eg, city<span class="o">)</span> <span class="o">[</span>SanFrancisco<span class="o">]</span>:
+Organization Name <span class="o">(</span>eg, company<span class="o">)</span> <span class="o">[</span>Fort-Funston<span class="o">]</span>:Infoslack-VPN
+Organizational Unit Name <span class="o">(</span>eg, section<span class="o">)</span> <span class="o">[</span>changeme<span class="o">]</span>:
+Common Name <span class="o">(</span>your name or your server hostname<span class="o">)</span> <span class="o">[</span>changeme<span class="o">]</span>:infoslack-server
+Name <span class="o">[</span>changeme<span class="o">]</span>:Admin
+Email Address <span class="o">[</span>mail@host.domain<span class="o">]</span>:root@initsec.com
+</code></pre></div>
+
+
+<p>Agora basta gerar a chave privada do servidor e o certificado para ser usado em
+nosso cliente de VPN, ao criar as chaves, preencha os dados que forem solicitados:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>. /etc/openvpn/easy-rsa/2.0/build-key-server server
+<span class="nv">$ </span>. /etc/openvpn/easy-rsa/2.0/build-key infoslack-client
+</code></pre></div>
+
+
+<p>Falta gerar o <strong>Diffie Hellman Parameters</strong> que é o método utilizado pelo OpenVPN
+para troca de chaves, ele irá gerar um arquivo <em>.pem</em>, essa tarefa demora um pouco:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>. /etc/openvpn/easy-rsa/2.0/build-dh
+</code></pre></div>
+
+
+<p>Criamos todas as chaves, precisamos movê-las para o local correto:</p>
+
+<div class="highlight"><pre><code class="bash">ubuntu@infoslack:/etc/openvpn/easy-rsa/2.0<span class="nv">$ </span><span class="nb">cd </span>keys/
+ubuntu@infoslack:/etc/openvpn/easy-rsa/2.0/keys<span class="nv">$ </span>cp ca.crt ca.key <span class="se">\</span>
+server.crt server.key dh2048.pem /etc/openvpn/
+</code></pre></div>
+
+
+<p>Falta pouco, precisamos dos arquivos de configuração que serão utilizados pelo
+server e cliente na comunicação:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">cd</span> /usr/share/doc/openvpn/examples/sample-config-files
+<span class="nv">$ </span>gunzip -d server.conf.gz
+<span class="nv">$ </span>cp server.conf /etc/openvpn/
+</code></pre></div>
+
+
+<p>Separe os arquivos de cliente para serem enviados a sua máquina:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>mkdir ~/client
+<span class="nv">$ </span>cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf <span class="se">\</span>
+~/client/
+<span class="nv">$ </span><span class="nb">cd</span> /etc/openvpn/easy-rsa/2.0/keys/
+<span class="nv">$ </span>cp ca.crt infoslack-client.crt infoslack-client.key ~/client/
+</code></pre></div>
+
+
+<p>Edite o arquivo de configuração <strong>client.conf</strong> e altere as informações
+referentes ao endereço do server e as chaves:</p>
+
+<pre><code>#mude para o ip/domínio do servidor:
+remote my-server-1 1194 -&gt; 111.222.333.44 1194
+
+#mude para o nome dos arquivos gerados:
+dh dh1024.pem -&gt; dh2048.pem
+ca ca.crt
+cert client.crt -&gt; infoslack-client.crt
+key client.key -&gt; infoslack-client.key
+</code></pre>
+
+<p>Compacte o diretório com os arquivos de cliente e envie para sua máquina:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>tar -czvf client.tar.gz client/
+<span class="nv">$ </span>scp client.tar.gz daniel@123.456.789.12:/opt
+</code></pre></div>
+
+
+<p>Antes de inicializar o serviço do OpenVPN no server, vamos criar um
+redirecionamento de tráfego da internet para a rede privada da VPN, para isso
+edite o arquivo <strong>server.conf</strong> em <strong>/etc/openvpn</strong> e descomente a linha:
+<code>;push "redirect-gateway def1 bypass-dhcp"</code>.</p>
+
+<p>Crie um script para configurar o iptables e encaminhar o tráfego através da VPN:</p>
+
+<div class="highlight"><pre><code class="shell-session"><span class="go">echo 1 &gt; /proc/sys/net/ipv4/ip_forward</span>
+
+<span class="go">iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT</span>
+<span class="go">iptables -A FORWARD -s 10.8.0.0/24 -j ACCEPT</span>
+<span class="go">iptables -A FORWARD -j REJECT</span>
+<span class="go">iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE</span>
+<span class="go">iptables -A INPUT -i tun+ -j ACCEPT</span>
+<span class="go">iptables -A FORWARD -i tun+ -j ACCEPT</span>
+<span class="go">iptables -A INPUT -i tap+ -j ACCEPT</span>
+<span class="go">iptables -A FORWARD -i tap+ -j ACCEPT</span>
+</code></pre></div>
+
+
+<p>Basicamente o script habilita o módulo <strong>ip_forward</strong> no kernel e cria uma rota
+que envia o tráfego de internet da VPS para o nosso túnel criptografado.</p>
+
+<p>Inicialize o serviço do OpenVPN e execute o script criado:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo service openvpn start
+<span class="nv">$ </span>sh ~/vpn-route
+</code></pre></div>
+
+
+<p>Verifique com o comando <strong>ifconfig</strong> a existência de uma nova interface chamada
+<strong>tun0</strong>.</p>
+
+<p>Supondo que sua máquina cliente seja linux e com o OpenVPN instalado,
+descompacte os arquivos de configuração de client gerados no server e execute:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>mkdir /opt/openvpn
+<span class="nv">$ </span>tar zxvf /opt/client.tar.gz -C /opt/openvpn
+<span class="nv">$ </span>openvpn --config /opt/openvpn/client/client.conf
+</code></pre></div>
+
+
+<p>Caso utilize Mac ou Windows verifique as ferramentas <a href="http://openvpn.se/">OpenVPN GUI</a>
+e <a href="https://code.google.com/p/tunnelblick/">tunnelblick</a>.</p>
+
+<p>Após inicializar o cliente OpenVPN a conexão com a VPN será inicializada e você
+receberá uma mensagem informando:
+<strong>Initialization Sequence Completed</strong>, agora podemos testar a nossa conexão com
+a VPN e ver se o redirecionamento de tráfego está ok. Para isso utilize o <a href="https://github.com/kennethreitz/httpbin">httpbin</a>:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>curl httpbin.org/ip
+<span class="o">{</span>
+  <span class="s2">&quot;origin&quot;</span>: <span class="s2">&quot;111.222.333.44&quot;</span>
+<span class="o">}</span>
+<span class="err">$</span>
+</code></pre></div>
+
+
+<p>Se o ip retornado for o da sua VPS, significa que o redirecionamento de tráfego
+da VPN está funcionando perfeitamente. Outro teste poderia ser feito utilizando o
+<a href="http://ifconfig.me/">ifconfig.me</a>:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>curl ifconfig.me
+111.222.333.44
+</code></pre></div>
+
+
+<p>Com a VPN sua conexão estará um pouco mais segura e você não precisará se
+preocupar com as armadilhas das redes wi-fi públicas. =)</p>
+
+</div>
+<br />
+<section class="read-more">
+  <h3>Leia também</h3>
+  <ul>
+    
+    <li>
+      <span>04/11/2013</span> &raquo;
+      <a href="/linux/compilando-o-kernel-linux">Compilando o Kernel Linux</a>
+    </li>
+    
+    <li>
+      <span>19/11/2013</span> &raquo;
+      <a href="/security/introducao-ao-iptables">Introdução ao iptables</a>
+    </li>
+    
+    <li>
+      <span>07/03/2014</span> &raquo;
+      <a href="/server/gerencie-chaves-publicas-no-servidor-com-gist">Gerencie chaves públicas no servidor com gist</a>
+    </li>
+    
+  </ul>
+</section>
+<br />
+<section>
+  <h3>Comentários</h3>
+  <div id="disqus_thread" aria-live="polite">
+    <script type="text/javascript">
+  var disqus_shortname = 'infoslack';
+
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://infoslack.disqus.com/embed.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+
+  </div>
+</section>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+            Copyright © 2013 - 2014
+          </p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44190365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Daniel Romero" />
+    <meta name="description" content="Monitore serviços e receba alertas com monit"/>
+    <meta name="keywords" content="server, linux, unix, services, servidor, monit, alertas, serviços"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="-hEvNN86IOrYXeIdV4odleriXAkBE5PAV_Peb2niNZw" />
+    <title>Monitore serviços e receba alertas com monit</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <script type="text/javascript" src="//use.typekit.net/yed8yuc.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">root@infoslack:~#</a></h1>
+        <a class="extra" href="/">home</a>
+        <a class="extra" href="/livro">livro</a>
+        <a class="extra" href="/about">about</a>
+        <a class="extra" href="http://infoslack.com/atom.xml"><i class="fa fa-rss"></i></a>
+      </div>
+
+      <h2>Monitore serviços e receba alertas com monit</h2>
+<p class="meta">05/03/2014</p>
+
+<div class="post">
+<h3>Introdução</h3>
+
+<p><a href="http://mmonit.com/monit/">Monit</a> é uma ferramenta open source que gerencia e
+monitora, aplicações, processos, arquivos, etc em sistemas Unix ou <a href="http://en.wikipedia.org/wiki/Unix-like">Unix-like</a>.
+Além disso, <strong>monit</strong> pode realizar reparos automáticos e executar ações em
+ocorrências de erro no sistema, por exemplo, restartar um serviço que teve falha
+repentina ou enviar e-mail de alerta avisando sobre algum erro.</p>
+
+<p>No exemplo a seguir, precisamos monitorar o <a href="http://nginx.org/">Nginx</a> e caso o
+serviço seja parado por qualquer motivo o <strong>monit</strong> deve nos enviar um e-mail
+de alerta informando sobre o incidente.</p>
+
+<h3>Instalação e Configuração</h3>
+
+<p>No exemplo estou monitorando uma instância Amazon EC2 com Ubuntu 12.04 LTS,
+assumindo que o Nginx está instalado e funcionando, vamos ao trabalho:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>sudo apt-get install monit
+</code></pre></div>
+
+
+<p>A configuração default do monit fica em <code>/etc/monit</code>, temos o <code>monitrc</code> que é
+o arquivo de configuração principal e o diretório <code>conf.d</code> que  armazena as
+configurações dos serviços que queremos ficar de olho.</p>
+
+<p>No nosso exemplo vamos ficar de olho no <em>nginx</em>, então crie um arquivo chamado
+<em>nginx.conf</em> no diretório <em>conf.d</em>:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>touch /etc/monit/conf.d/nginx.conf
+</code></pre></div>
+
+
+<p>A sintaxe do monit é bem simples e muito legível:</p>
+
+<div class="highlight"><pre><code class="powershell"><span class="n">set</span> <span class="n">alert</span> <span class="n">infoslack</span><span class="nv">@gmail</span><span class="p">.</span><span class="n">com</span>
+
+<span class="n">check</span> <span class="n">host</span> <span class="n">54</span><span class="p">.</span><span class="n">186</span><span class="p">.</span><span class="n">55</span><span class="p">.</span><span class="n">68</span> <span class="n">with</span> <span class="n">address</span> <span class="n">54</span><span class="p">.</span><span class="n">186</span><span class="p">.</span><span class="n">55</span><span class="p">.</span><span class="n">68</span>
+    <span class="k">if</span> <span class="n">failed</span> <span class="n">host</span> <span class="n">54</span><span class="p">.</span><span class="n">186</span><span class="p">.</span><span class="n">55</span><span class="p">.</span><span class="n">68</span> <span class="n">port</span> <span class="n">80</span> <span class="n">then</span> <span class="n">alert</span>
+
+<span class="n">set</span> <span class="n">mailserver</span> <span class="n">smtp</span><span class="p">.</span><span class="n">gmail</span><span class="p">.</span><span class="n">com</span> <span class="n">port</span> <span class="n">587</span>
+    <span class="n">username</span> <span class="s2">&quot;login-gmail&quot;</span> <span class="n">password</span> <span class="s2">&quot;password&quot;</span>
+    <span class="n">using</span> <span class="n">tlsv1</span>
+    <span class="n">with</span> <span class="n">timeout</span> <span class="n">30</span> <span class="n">seconds</span>
+</code></pre></div>
+
+
+<p>Vamos por partes:</p>
+
+<ul>
+<li><code>set alert</code> estou informando o e-mail onde quero receber os alertas;</li>
+<li><code>check host</code> quero que o monit fique verificando o host que pode ser ip/domínio;</li>
+<li><code>if failed</code> em caso de falha ele deve executar uma ação, no caso o alerta;</li>
+<li><code>set mailserver</code> configura o server de smtp para envio de e-mails;</li>
+</ul>
+
+
+<p>Gosto de usar o <em>Gmail</em> para este serviço pois ter um servidor de <em>smtp</em> próprio
+não é uma boa idéia por consumir recursos(processador/memória) do server, além
+disso tem o risco do e-mail enviado cair no <em>Spam</em>.</p>
+
+<p>No exemplo configurei o tempo que o monit leva para fazer a verificação do
+<strong>host</strong>, essa configuração fica em <code>/etc/monit/monitrc</code> no parâmetro
+<code>set daemon</code>, por default o valor é <em>120</em> segundos no meu caso deixei em <em>60</em>.</p>
+
+<p>Depois de tudo configurado, basta testar parando o serviço do <em>nginx</em>, como
+resultado deve chegar um alerta por e-mail informando sobre a falha:</p>
+
+<p><img src="/images/monit-alert-fail.png" alt="Alerta monit" /></p>
+
+<p>Ao iniciar o <em>nginx</em> novamente, o monit envia outro alerta avisando que o
+serviço está funcionando novamente:</p>
+
+<p><img src="/images/monit-alert-success.png" alt="Alerta monit" /></p>
+
+<p>Outra configuração poderia ser feita para verificar o <code>PID</code> do <em>nginx</em>, ou seja
+ficar de olho no processo do serviço e em caso de interrupção o próprio monit
+executaria uma ação para iniciar o serviço novamente e alertaria:</p>
+
+<div class="highlight"><pre><code class="powershell"><span class="n">check</span> <span class="k">process</span> <span class="n">nginx</span> <span class="n">with</span> <span class="n">pidfile</span> <span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">run</span><span class="p">/</span><span class="n">nginx</span><span class="p">.</span><span class="n">pid</span>
+    <span class="n">start</span> <span class="n">program</span> <span class="p">=</span> <span class="s2">&quot;/etc/init.d/nginx start&quot;</span>
+    <span class="n">stop</span> <span class="n">program</span> <span class="p">=</span> <span class="s2">&quot;/etc/init.d/nginx stop&quot;</span>
+    <span class="k">if</span> <span class="n">failed</span> <span class="n">host</span> <span class="n">54</span><span class="p">.</span><span class="n">186</span><span class="p">.</span><span class="n">55</span><span class="p">.</span><span class="n">68</span> <span class="n">port</span> <span class="n">80</span> <span class="n">then</span> <span class="n">restart</span>
+</code></pre></div>
+
+
+<p><br /></p>
+
+<h3>Finalizando</h3>
+
+<p>A <a href="http://mmonit.com/monit/documentation/monit.html">documentação do monit</a> é muito rica e vale conferir outras opções como por
+exemplo a formatação do layout do e-mail, as informações que serão enviadas no
+alerta e até a configuração para utilizar a interface web.</p>
+
+<p>Use e abuse da criatividade ;)</p>
+
+</div>
+<br />
+<section class="read-more">
+  <h3>Leia também</h3>
+  <ul>
+    
+    <li>
+      <span>04/11/2013</span> &raquo;
+      <a href="/linux/compilando-o-kernel-linux">Compilando o Kernel Linux</a>
+    </li>
+    
+    <li>
+      <span>04/03/2014</span> &raquo;
+      <a href="/security/criando-uma-comunicacao-segura-com-openvpn">Criando uma comunicação segura com OpenVPN</a>
+    </li>
+    
+    <li>
+      <span>22/11/2013</span> &raquo;
+      <a href="/security/conheca-o-metasploit-framework">Conheça o Metasploit Framework</a>
+    </li>
+    
+  </ul>
+</section>
+<br />
+<section>
+  <h3>Comentários</h3>
+  <div id="disqus_thread" aria-live="polite">
+    <script type="text/javascript">
+  var disqus_shortname = 'infoslack';
+
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://infoslack.disqus.com/embed.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+
+  </div>
+</section>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+            Copyright © 2013 - 2014
+          </p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44190365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>

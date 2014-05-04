@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Daniel Romero" />
+    <meta name="description" content="Rails, PostgreSQL e o uso de índices"/>
+    <meta name="keywords" content="rails, postgresql, indexação, desenvolvimento, software"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="-hEvNN86IOrYXeIdV4odleriXAkBE5PAV_Peb2niNZw" />
+    <title>Rails, PostgreSQL e o uso de índices</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <script type="text/javascript" src="//use.typekit.net/yed8yuc.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">root@infoslack:~#</a></h1>
+        <a class="extra" href="/">home</a>
+        <a class="extra" href="/livro">livro</a>
+        <a class="extra" href="/about">about</a>
+        <a class="extra" href="http://infoslack.com/atom.xml"><i class="fa fa-rss"></i></a>
+      </div>
+
+      <h2>Rails, PostgreSQL e o uso de índices</h2>
+<p class="meta">03/05/2014</p>
+
+<div class="post">
+<h3>Update:</h3>
+
+<p>"Vale lembrar que campos com índices únicos tratam maiúsculas e minúsculas
+como caracteres diferentes. Um campo username com índice único irá aceitar,
+por exemplo, os valores <code>john</code>, <code>John</code> e <code>JOHN</code> como valores únicos.
+Para evitar que isso aconteça, use a extensão citext."</p>
+
+<p>Dica do <a href="https://twitter.com/fnando">Nando</a></p>
+
+<p>Confira em: <a href="http://simplesideias.com.br/usando-campos-case-insensitive-no-postgresql">simplesideias.com.br</a></p>
+
+<hr />
+
+<p>Ultimamente tenho feito alguns trabalhos que envolvem "melhorias" de software,
+ajustes para aumentar o desempenho em produção ou simplesmente para fazer
+funcionar da forma correta.</p>
+
+<p>As melhorias abordam coisas simples como fazer uso correto do ActiveRecord,
+utilizar da melhor forma os recursos da tecnologia escolhida. Em boa parte dos
+casos o uso de índices e correções no uso do ActiveRecord já resolve bastante.</p>
+
+<h3>Para que serve um índice ?</h3>
+
+<p>Em banco de dados, um índice é uma referência utilizada para otimizações, isso
+permite que um registro seja localizado de forma mais rápida em uma consulta.</p>
+
+<p>O PostegreSQL <a href="http://www.postgresql.org/docs/9.3/static/indexes.html">possui várias opções de índices</a>, porém o tipo mais comumente
+utilizado é o <a href="http://en.wikipedia.org/wiki/B-tree">B-tree</a>.</p>
+
+<h3>Índice de chave primária</h3>
+
+<p>É comum adicionarmos um índice para as chaves primárias de nossas tabelas, mas
+no caso do PostgreSQL isso é feito de forma automática, por tanto não precisamos
+criar de forma explícita.</p>
+
+<p>Quando geramos uma migration:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">CreateUser</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">create_table</span> <span class="ss">:users</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:name</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:email</span>
+
+      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+<p>A saída no psql será a seguinte:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="lineno"> 1</span> <span class="n">hfh_development</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span> <span class="n">users</span>
+<span class="lineno"> 2</span> 
+<span class="lineno"> 3</span>                         <span class="k">Table</span> <span class="ss">&quot;public.users&quot;</span>
+<span class="lineno"> 4</span> 
+<span class="lineno"> 5</span> <span class="n">id</span>      <span class="nb">integer</span>   <span class="k">not</span> <span class="k">null</span> <span class="k">default</span> <span class="n">nextval</span><span class="p">(</span><span class="s1">&#39;users_id_seq&#39;</span><span class="p">::</span><span class="n">regclass</span><span class="p">)</span>
+<span class="lineno"> 6</span> <span class="n">name</span>    <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>  <span class="k">not</span> <span class="k">null</span>
+<span class="lineno"> 7</span> <span class="n">email</span>   <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>  <span class="k">not</span> <span class="k">null</span>
+<span class="lineno"> 8</span> 
+<span class="lineno"> 9</span> <span class="n">Indexes</span><span class="p">:</span>
+<span class="lineno">10</span> <span class="ss">&quot;users_pkey&quot;</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Na linha 10 podemos ver que o PostgreSQL adicionou o índice B-tree na chave
+primária, neste exemplo no campo <code>id</code>.</p>
+
+<h3>Aplicações Rails com baixo desempenho por falta de índices</h3>
+
+<p>Imagine um fórum que possui muitas perguntas organizadas por categorias, sem o
+uso de índices a busca seria bastante lenta de ser realizada.
+A falta de índices em chaves estrangeiras é um dos problemas mais comuns que
+provocam o baixo desempenho em apps Rails.</p>
+
+<p>O uso de índices em relacionamentos poderia ser dessa forma:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">CreateQuestions</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">create_table</span> <span class="ss">:questions</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:title</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">text</span> <span class="ss">:content</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">belongs_to</span> <span class="ss">:category</span><span class="p">,</span> <span class="ss">index</span><span class="p">:</span> <span class="kp">true</span>
+
+      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+<p>Ao adicionar <code>index: true</code> na migration para o relacionamento, o PostgreSQL
+gerou um índice chamado <code>index_questions_on_category_id</code> que aponta para o
+campo <code>category_id</code>:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="n">hfh_development</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span> <span class="n">questions</span>
+
+                <span class="k">Table</span> <span class="ss">&quot;public.questions&quot;</span>
+
+<span class="n">id</span>          <span class="nb">integer</span>   <span class="k">not</span> <span class="k">null</span> <span class="k">default</span> <span class="n">nextval</span><span class="p">(</span><span class="s1">&#39;questions_id_seq&#39;</span><span class="p">::</span><span class="n">regclass</span><span class="p">)</span>
+<span class="n">title</span>       <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>  <span class="k">not</span> <span class="k">null</span>
+<span class="n">content</span>     <span class="nb">text</span>                    <span class="k">not</span> <span class="k">null</span>
+<span class="n">category_id</span> <span class="nb">integer</span>                 <span class="k">not</span> <span class="k">null</span>
+
+<span class="n">Indexes</span><span class="p">:</span>
+<span class="ss">&quot;questions_pkey&quot;</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="ss">&quot;index_questions_on_category_id&quot;</span> <span class="n">btree</span> <span class="p">(</span><span class="n">category_id</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Isso faz toda diferença nas consultas feitas pela aplicação.</p>
+
+<h3>Evitando registros duplicados</h3>
+
+<p>Pois bem, em alguns dos trabalhos encontrei o problema de registros duplicados
+no banco de dados, isso normalmente ocorre por falta do uso de índices para impor
+unicidade no valor salvo (apenas validar no Rails não vai resolver o problema).</p>
+
+<p>Imagine dois usuários tentando fazer um cadastro utilizando o mesmo e-mail e a
+sua aplicação possuí apenas o <code>validates_uniqueness_of</code> no model para validar a
+unicidade do e-mail.</p>
+
+<p>Ao submeterem o formulário preenchido ao mesmo tempo, o Rails vai verificar na
+tabela de usuários para saber se já existe algum registro com o e-mail fornecido
+, não encontrando nada ele responde que pode prosseguir e acaba permitindo o
+registro de 2 e-mails iguais mandando a validação de unicidade pro espaço.</p>
+
+<p>Para evitar isso, podemos fazer uso de índices de unicidade</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">CreateUser</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">create_table</span> <span class="ss">:users</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:name</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:email</span>
+
+      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+    <span class="k">end</span>
+
+    <span class="n">add_index</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:email</span><span class="p">,</span> <span class="ss">unique</span><span class="p">:</span> <span class="kp">true</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+<p>Adicionando o <code>unique: true</code> na migration o PostgreSQL irá gerar o seguinte
+índice no banco:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="lineno"> 1</span> <span class="n">hfh_development</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span> <span class="n">users</span>
+<span class="lineno"> 2</span> 
+<span class="lineno"> 3</span>                         <span class="k">Table</span> <span class="ss">&quot;public.users&quot;</span>
+<span class="lineno"> 4</span> 
+<span class="lineno"> 5</span> <span class="n">id</span>      <span class="nb">integer</span>   <span class="k">not</span> <span class="k">null</span> <span class="k">default</span> <span class="n">nextval</span><span class="p">(</span><span class="s1">&#39;users_id_seq&#39;</span><span class="p">::</span><span class="n">regclass</span><span class="p">)</span>
+<span class="lineno"> 6</span> <span class="n">name</span>    <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>  <span class="k">not</span> <span class="k">null</span>
+<span class="lineno"> 7</span> <span class="n">email</span>   <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>  <span class="k">not</span> <span class="k">null</span>
+<span class="lineno"> 8</span> 
+<span class="lineno"> 9</span> <span class="n">Indexes</span><span class="p">:</span>
+<span class="lineno">10</span> <span class="ss">&quot;users_pkey&quot;</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="lineno">11</span> <span class="ss">&quot;index_users_on_email&quot;</span> <span class="k">UNIQUE</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">email</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Agora é possível garantir a integridade dos dados e evitar a duplicação de
+registros.</p>
+
+<h3>Índices parciais</h3>
+
+<p>Basicamente um índice parcial é definido por uma expressão condicional, em
+outras palavras ele faz uso da cláusula <code>where</code>, dessa forma ele é construído
+apenas com as informações que satisfazem a condição criada.</p>
+
+<p>Imagine que no aplicativo de fórum temos uma tabela para perguntas e nessa
+tabela contém um campo para marcar perguntas como respondidas (true) ou não
+respondidas (false), podemos criar um índice parcial para filtrar as não
+respondidas e melhorar o desempenho na consulta para exibi-las:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">CreateQuestions</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">create_table</span> <span class="ss">:questions</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:title</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">text</span> <span class="ss">:content</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">boolean</span> <span class="ss">:answered</span><span class="p">,</span> <span class="ss">default</span><span class="p">:</span> <span class="kp">false</span>
+
+      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+    <span class="k">end</span>
+
+    <span class="n">add_index</span> <span class="ss">:questions</span><span class="p">,</span> <span class="ss">:answered</span><span class="p">,</span> <span class="ss">where</span><span class="p">:</span> <span class="s2">&quot;answered = false&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+<p>O PostegreSQL vai gerar o seguinte índice:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="n">hfh_development</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span> <span class="n">questions</span>
+
+                <span class="k">Table</span> <span class="ss">&quot;public.questions&quot;</span>
+
+<span class="n">id</span>          <span class="nb">integer</span>   <span class="k">not</span> <span class="k">null</span> <span class="k">default</span> <span class="n">nextval</span><span class="p">(</span><span class="s1">&#39;questions_id_seq&#39;</span><span class="p">::</span><span class="n">regclass</span><span class="p">)</span>
+<span class="n">title</span>       <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>  <span class="k">not</span> <span class="k">null</span>
+<span class="n">content</span>     <span class="nb">text</span>                    <span class="k">not</span> <span class="k">null</span>
+<span class="n">answered</span>    <span class="nb">boolean</span>                 <span class="k">default</span> <span class="k">false</span>
+
+<span class="n">Indexes</span><span class="p">:</span>
+<span class="ss">&quot;questions_pkey&quot;</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="ss">&quot;index_questions_on_answered&quot;</span> <span class="n">btree</span> <span class="p">(</span><span class="n">questions</span><span class="p">)</span> <span class="k">WHERE</span> <span class="n">answered</span> <span class="o">=</span> <span class="k">false</span>
+</code></pre></div>
+
+
+<p>Espero que tenha ficado claro a importância do uso de índices.
+Happy Hacking ;)</p>
+
+<h4>Referências</h4>
+
+<ul>
+<li><a href="http://guides.rubyonrails.org/migrations.html">http://guides.rubyonrails.org/migrations.html</a></li>
+<li><a href="http://www.postgresql.org/docs/9.3/static/indexes.html">http://www.postgresql.org/docs/9.3/static/indexes.html</a></li>
+<li><a href="http://www.postgresql.org/docs/9.3/static/indexes-ordering.html">http://www.postgresql.org/docs/9.3/static/indexes-ordering.html</a></li>
+<li><a href="http://www.postgresql.org/docs/9.3/static/indexes-unique.html">http://www.postgresql.org/docs/9.3/static/indexes-unique.html</a></li>
+<li><a href="http://www.postgresql.org/docs/9.3/static/indexes-partial.html">http://www.postgresql.org/docs/9.3/static/indexes-partial.html</a></li>
+</ul>
+
+
+</div>
+<br />
+<section class="read-more">
+  <h3>Leia também</h3>
+  <ul>
+    
+    <li>
+      <span>04/11/2013</span> &raquo;
+      <a href="/linux/compilando-o-kernel-linux">Compilando o Kernel Linux</a>
+    </li>
+    
+    <li>
+      <span>04/03/2014</span> &raquo;
+      <a href="/security/criando-uma-comunicacao-segura-com-openvpn">Criando uma comunicação segura com OpenVPN</a>
+    </li>
+    
+    <li>
+      <span>07/03/2014</span> &raquo;
+      <a href="/server/gerencie-chaves-publicas-no-servidor-com-gist">Gerencie chaves públicas no servidor com gist</a>
+    </li>
+    
+  </ul>
+</section>
+<br />
+<section>
+  <h3>Comentários</h3>
+  <div id="disqus_thread" aria-live="polite">
+    <script type="text/javascript">
+  var disqus_shortname = 'infoslack';
+
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://infoslack.disqus.com/embed.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+
+  </div>
+</section>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+            Copyright © 2013 - 2014
+          </p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44190365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>
