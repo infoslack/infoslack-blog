@@ -5,6 +5,19 @@ category: development
 keywords: rails, postgresql, indexação, desenvolvimento, software
 ---
 
+### Update:
+
+"Vale lembrar que campos com índices únicos tratam maiúsculas e minúsculas
+como caracteres diferentes. Um campo username com índice único irá aceitar,
+por exemplo, os valores `john`, `John` e `JOHN` como valores únicos.
+Para evitar que isso aconteça, use a extensão citext."
+
+Dica do [Nando](https://twitter.com/fnando)
+
+Confira em: [simplesideias.com.br](http://simplesideias.com.br/usando-campos-case-insensitive-no-postgresql)
+
+----
+
 Ultimamente tenho feito alguns trabalhos que envolvem "melhorias" de software,
 ajustes para aumentar o desempenho em produção ou simplesmente para fazer
 funcionar da forma correta.
