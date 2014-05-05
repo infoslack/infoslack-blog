@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Daniel Romero" />
+    <meta name="description" content="Find, liste os arquivos modificados na última hora"/>
+    <meta name="keywords" content="linux, shell, find, unix"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="-hEvNN86IOrYXeIdV4odleriXAkBE5PAV_Peb2niNZw" />
+    <title>Find, liste os arquivos modificados na última hora</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <script type="text/javascript" src="//use.typekit.net/yed8yuc.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">root@infoslack:~#</a></h1>
+        <a class="extra" href="/">home</a>
+        <a class="extra" href="/livro">livro</a>
+        <a class="extra" href="/about">about</a>
+        <a class="extra" href="http://infoslack.com/atom.xml"><i class="fa fa-rss"></i></a>
+      </div>
+
+      <h2>Find, liste os arquivos modificados na última hora</h2>
+<p class="meta">21/09/2013</p>
+
+<div class="post">
+<p>Usando o <code>find</code> para listar os arquivos que foram modificados na última hora:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>find . -mtime -1
+</code></pre></div>
+
+
+<p><br /></p>
+
+<ul>
+<li>o <code>.</code> é o path para a busca</li>
+<li><code>-mtime</code> parâmetro de tempo</li>
+<li><code>-1</code> lista os arquivos modificados nas últimas 24 horas</li>
+</ul>
+
+
+<p><strong>Outras configurações:</strong></p>
+
+<ul>
+<li><code>-amin</code> acessado em minutos</li>
+<li><code>-atime</code> acessado em dias</li>
+<li><code>-cmin</code> criado em minutos</li>
+<li><code>-ctime</code> criado em dias</li>
+<li><code>-mmin</code> modificado em minutos</li>
+</ul>
+
+
+<p><strong>E ainda temos parâmetros numéricos:</strong></p>
+
+<ul>
+<li><code>-1</code> últimas 24 horas</li>
+<li><code>-0.5</code> últimas 12 horas</li>
+<li><code>-0.25</code> últimas 6 horas</li>
+<li><code>+3</code> mais de três dias</li>
+</ul>
+
+
+</div>
+<br />
+<section class="read-more">
+  <h3>Leia também</h3>
+  <ul>
+    
+    <li>
+      <span>21/09/2013</span> &raquo;
+      <a href="/linux/manipulando-a-memoria-ram-e-swap">Manipulando a memória RAM e a SWAP</a>
+    </li>
+    
+    <li>
+      <span>21/09/2013</span> &raquo;
+      <a href="/shell/pssh-compartilhando-o-shell-de-forma-facil">Pssh - Compartilhando o shell de forma fácil</a>
+    </li>
+    
+    <li>
+      <span>04/11/2013</span> &raquo;
+      <a href="/linux/compilando-o-kernel-linux">Compilando o Kernel Linux</a>
+    </li>
+    
+  </ul>
+</section>
+<br />
+<section>
+  <h3>Comentários</h3>
+  <div id="disqus_thread" aria-live="polite">
+    <script type="text/javascript">
+  var disqus_shortname = 'infoslack';
+
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://infoslack.disqus.com/embed.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+
+  </div>
+</section>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+            Copyright © 2013 - 2014
+          </p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44190365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>

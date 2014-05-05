@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Daniel Romero" />
+    <meta name="description" content="Utilizando o recurso de arrays do PostgreSQL com Rails 4"/>
+    <meta name="keywords" content="rails4, postgresql, arrays, desenvolvimento, software"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="-hEvNN86IOrYXeIdV4odleriXAkBE5PAV_Peb2niNZw" />
+    <title>Utilizando o recurso de arrays do PostgreSQL com Rails 4</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <script type="text/javascript" src="//use.typekit.net/yed8yuc.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">root@infoslack:~#</a></h1>
+        <a class="extra" href="/">home</a>
+        <a class="extra" href="/livro">livro</a>
+        <a class="extra" href="/about">about</a>
+        <a class="extra" href="http://infoslack.com/atom.xml"><i class="fa fa-rss"></i></a>
+      </div>
+
+      <h2>Utilizando o recurso de arrays do PostgreSQL com Rails 4</h2>
+<p class="meta">05/05/2014</p>
+
+<div class="post">
+<p>O <a href="http://www.postgresql.org/docs/9.3/static/arrays.html">PostgreSQL</a> permite que registros sejam armazenados como arrays
+multidimensionais com o comprimento variável e esse recurso pode ser utilizado
+com o <a href="https://github.com/rails/rails/pull/7547">Rails 4</a>.</p>
+
+<p>Imagine que em um e-commerce cada produto cadastrado, deve pertencer a uma
+categoria, o recurso de arrays deve ser ativo na migration com a opção
+<code>array: true</code> onde por padrão é atribuído um array vazio. Nossa migration
+ficaria assim:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">CreateProducts</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">create_table</span> <span class="ss">:products</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:name</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:description</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:categories</span><span class="p">,</span> <span class="ss">array</span><span class="p">:</span> <span class="kp">true</span><span class="p">,</span> <span class="ss">default</span><span class="p">:</span> <span class="o">[]</span>
+
+      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+<p>Verificando com o psql podemos ver o tipo <code>[]</code> criado pelo Postgres que indica
+que a coluna criada será tratada como um array:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="n">store_development</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span> <span class="n">products</span>
+
+                     <span class="k">Table</span> <span class="ss">&quot;public.products&quot;</span>
+
+<span class="n">id</span>  <span class="nb">integer</span> <span class="k">not</span> <span class="k">null</span> <span class="k">default</span> <span class="n">nextval</span><span class="p">(</span><span class="s1">&#39;products_id_seq&#39;</span><span class="p">::</span><span class="n">regclass</span><span class="p">)</span>
+<span class="n">name</span>        <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">description</span> <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">categories</span>  <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)[]</span>  <span class="k">default</span> <span class="s1">&#39;{}&#39;</span><span class="p">::</span><span class="nb">character</span> <span class="nb">varying</span><span class="p">[]</span>
+
+<span class="n">Indexes</span><span class="p">:</span>
+<span class="ss">&quot;products_pkey&quot;</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">btree</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>No rails console podemos testar o comportamento do que foi gerado:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Product</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+              <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Book Rails&quot;</span><span class="p">,</span>
+              <span class="ss">categories</span><span class="p">:</span><span class="o">[</span><span class="s2">&quot;ruby&quot;</span><span class="p">,</span> <span class="s2">&quot;rails&quot;</span><span class="p">,</span> <span class="s2">&quot;dev&quot;</span><span class="o">]</span>
+           <span class="p">)</span>
+
+<span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">2</span><span class="n">ms</span><span class="p">)</span>  <span class="k">BEGIN</span> <span class="no">SQL</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">4</span><span class="n">ms</span><span class="p">)</span>  <span class="no">INSERT</span> <span class="no">INTO</span> <span class="s2">&quot;products&quot;</span>
+<span class="p">(</span><span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="s2">&quot;created_at&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;updated_at&quot;</span><span class="p">)</span>
+
+<span class="no">VALUES</span> <span class="p">(</span><span class="vg">$1</span><span class="p">,</span> <span class="vg">$2</span><span class="p">,</span> <span class="vg">$3</span><span class="p">,</span> <span class="vg">$4</span><span class="p">)</span> <span class="no">RETURNING</span> <span class="s2">&quot;id&quot;</span>
+<span class="o">[[</span><span class="s2">&quot;categories&quot;</span><span class="p">,</span> <span class="s2">&quot;{</span><span class="se">\&quot;</span><span class="s2">ruby</span><span class="se">\&quot;</span><span class="s2">,</span><span class="se">\&quot;</span><span class="s2">rails</span><span class="se">\&quot;</span><span class="s2">,</span><span class="se">\&quot;</span><span class="s2">dev</span><span class="se">\&quot;</span><span class="s2">}&quot;</span><span class="o">]</span><span class="p">,</span>
+<span class="o">[</span><span class="s2">&quot;created_at&quot;</span><span class="p">,</span> <span class="s2">&quot;2014-05-05 18:33:58.031321&quot;</span><span class="o">]</span><span class="p">,</span>
+<span class="o">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;Book Rails&quot;</span><span class="o">]</span><span class="p">,</span>
+<span class="o">[</span><span class="s2">&quot;updated_at&quot;</span><span class="p">,</span> <span class="s2">&quot;2014-05-05 18:33:58.031321&quot;</span><span class="o">]]</span>
+<span class="p">(</span><span class="mi">9</span><span class="o">.</span><span class="mi">3</span><span class="n">ms</span><span class="p">)</span> <span class="no">COMMIT</span>
+
+<span class="o">=&gt;</span> <span class="c1">#&lt;Product:0x007f3f00bee498&gt; {</span>
+            <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">,</span>
+          <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s2">&quot;Book Rails&quot;</span><span class="p">,</span>
+    <span class="ss">:categories</span> <span class="o">=&gt;</span> <span class="o">[</span>
+        <span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="s2">&quot;ruby&quot;</span><span class="p">,</span>
+        <span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="s2">&quot;rails&quot;</span><span class="p">,</span>
+        <span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="s2">&quot;dev&quot;</span>
+    <span class="o">]</span><span class="p">,</span>
+    <span class="ss">:created_at</span> <span class="o">=&gt;</span> <span class="no">Mon</span><span class="p">,</span> <span class="mo">05</span> <span class="no">May</span> <span class="mi">2014</span> <span class="mi">15</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mi">58</span> <span class="no">BRT</span> <span class="o">-</span><span class="mo">03</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+    <span class="ss">:updated_at</span> <span class="o">=&gt;</span> <span class="no">Mon</span><span class="p">,</span> <span class="mo">05</span> <span class="no">May</span> <span class="mi">2014</span> <span class="mi">15</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mi">58</span> <span class="no">BRT</span> <span class="o">-</span><span class="mo">03</span><span class="p">:</span><span class="mo">00</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>Voltando ao psql vamos ver como os dados foram armazenados na tabela:</p>
+
+<div class="highlight"><pre><code class="sql"><span class="n">store_development</span><span class="o">=#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">products</span><span class="p">;</span>
+
+<span class="n">id</span> <span class="o">|</span>    <span class="n">name</span>    <span class="o">|</span>    <span class="n">categories</span>   <span class="o">|</span>
+<span class="c1">---+------------+-----------------+</span>
+<span class="mi">2</span>  <span class="o">|</span> <span class="n">Book</span> <span class="n">Rails</span> <span class="o">|</span> <span class="err">{</span><span class="n">ruby</span><span class="p">,</span><span class="n">rails</span><span class="p">,</span><span class="n">dev</span><span class="err">}</span> <span class="o">|</span>
+
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>As consultas podem ser feitas normalmente com o ActiveRecord, nada muda:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Product</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;&#39;ruby&#39; = ANY (categories)&quot;</span><span class="p">)</span>
+
+<span class="no">Product</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>
+  <span class="no">SELECT</span> <span class="s2">&quot;products&quot;</span> <span class="o">*</span> <span class="no">FROM</span> <span class="s2">&quot;products&quot;</span>  <span class="no">WHERE</span> <span class="p">(</span><span class="s1">&#39;ruby&#39;</span> <span class="o">=</span> <span class="no">ANY</span> <span class="p">(</span><span class="n">categories</span><span class="p">))</span>
+
+<span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Relation</span> <span class="o">[</span>
+  <span class="no">Product</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Book Rails&quot;</span><span class="p">,</span>
+  <span class="ss">categories</span><span class="p">:</span> <span class="o">[</span><span class="s2">&quot;ruby&quot;</span><span class="p">,</span> <span class="s2">&quot;rails&quot;</span><span class="p">,</span> <span class="s2">&quot;dev&quot;</span><span class="o">]</span><span class="p">,</span>
+  <span class="n">created_at</span><span class="p">:</span> <span class="s2">&quot;2014-05-05 18:33:58&quot;</span><span class="p">,</span>
+  <span class="n">updated_at</span><span class="p">:</span> <span class="s2">&quot;2014-05-05 18:33:58&quot;</span>
+<span class="o">]</span>
+</code></pre></div>
+
+
+<p>Explore ao máximo os recursos e confira as referências.</p>
+
+<p>Happy Hacking ;)</p>
+
+<h3>Referências</h3>
+
+<p><a href="http://www.postgresql.org/docs/9.3/static/arrays.html">http://www.postgresql.org/docs/9.3/static/arrays.html</a>
+<a href="https://github.com/rails/rails/pull/7547">https://github.com/rails/rails/pull/7547</a></p>
+
+</div>
+<br />
+<section class="read-more">
+  <h3>Leia também</h3>
+  <ul>
+    
+    <li>
+      <span>03/05/2014</span> &raquo;
+      <a href="/development/rails-postgres-e-indices">Rails, PostgreSQL e o uso de índices</a>
+    </li>
+    
+    <li>
+      <span>04/11/2013</span> &raquo;
+      <a href="/linux/compilando-o-kernel-linux">Compilando o Kernel Linux</a>
+    </li>
+    
+    <li>
+      <span>06/03/2014</span> &raquo;
+      <a href="/server/automatize-tarefas-com-monit">Automatize tarefas com monit</a>
+    </li>
+    
+  </ul>
+</section>
+<br />
+<section>
+  <h3>Comentários</h3>
+  <div id="disqus_thread" aria-live="polite">
+    <script type="text/javascript">
+  var disqus_shortname = 'infoslack';
+
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://infoslack.disqus.com/embed.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+
+  </div>
+</section>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+            Copyright © 2013 - 2014
+          </p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44190365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>

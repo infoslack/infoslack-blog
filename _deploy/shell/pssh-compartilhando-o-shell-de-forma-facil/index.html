@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Daniel Romero" />
+    <meta name="description" content="Pssh - Compartilhando o shell de forma fácil"/>
+    <meta name="keywords" content="linux, shell, unix, ssh"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="-hEvNN86IOrYXeIdV4odleriXAkBE5PAV_Peb2niNZw" />
+    <title>Pssh - Compartilhando o shell de forma fácil</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <script type="text/javascript" src="//use.typekit.net/yed8yuc.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  </head>
+  <body>
+
+    <div class="site">
+      <div class="header">
+        <h1 class="title"><a href="/">root@infoslack:~#</a></h1>
+        <a class="extra" href="/">home</a>
+        <a class="extra" href="/livro">livro</a>
+        <a class="extra" href="/about">about</a>
+        <a class="extra" href="http://infoslack.com/atom.xml"><i class="fa fa-rss"></i></a>
+      </div>
+
+      <h2>Pssh - Compartilhando o shell de forma fácil</h2>
+<p class="meta">21/09/2013</p>
+
+<div class="post">
+<p>Já precisou compartilhar rapidamente o shell com um amigo e ficou preso às configurações de SSH e algum multiplexador de terminal?</p>
+
+<p>E se fosse simples fazer isso enviando apenas uma URL ?</p>
+
+<h3>Pssh</h3>
+
+<p>De vez em quando, precisamos compartilhar o shell com alguém de forma rápida, mas esbarramos em tarefas como criar um novo usuário para SSH, liberar porta no Firewall e até configurar algum multiplexador de terminal, como <code>Screen</code> ou <code>tmux</code>, e o que deveria ser rápido acaba consumindo um pouco de tempo.</p>
+
+<p>Pensando nesses problemas, o desenvolvedor <a href="https://twitter.com/kellymartin">Kelly Martin</a> criou o projeto Open Source escrito em <code>Ruby</code> e <code>JavaScript</code> chamado <a href="https://github.com/portly/pssh">Pssh</a> para tornar tudo mais fácil.</p>
+
+<p>O Pssh quando executado, gera uma URL que, quando acessada via browser na porta <code>8022</code>, permite ou não, a interação com o shell:</p>
+
+<p><img src="/images/pssh-ex01.png" alt="Compartilhando shell com Pssh" /></p>
+
+<p>Para instalar o Pssh você só vai precisar do Ruby versão 1.9.X ou mais recente:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gem install pssh
+</code></pre></div>
+
+
+<p>Opções de uso podem ser vistas com o parâmetro -h:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>pssh -h
+</code></pre></div>
+
+
+<p>A opção <code>--readonly</code> libera uma sessão para somente leitura, não existe interação com o shell:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>pssh --readonly
+</code></pre></div>
+
+
+<p>O parâmetro <code>-p</code> possibilita modificarmos a porta default que é <code>8022</code>:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>pssh -p 5000
+</code></pre></div>
+
+
+<p>Se você faz uso de algum multiplexador como tmux ou screen, o Pssh pode ser combinado com eles:</p>
+
+<p><img src="/images/tmux-pssh.png" alt="Tmux e Pssh" /></p>
+
+<p>Contribua com o projeto: <a href="https://github.com/portly/pssh">Pssh Github</a></p>
+
+<p>Veja um exemplo prático de uso pelo autor: <a href="http://portly.github.io/pssh/">Pssh by Portly</a></p>
+
+</div>
+<br />
+<section class="read-more">
+  <h3>Leia também</h3>
+  <ul>
+    
+    <li>
+      <span>21/09/2013</span> &raquo;
+      <a href="/linux/manipulando-a-memoria-ram-e-swap">Manipulando a memória RAM e a SWAP</a>
+    </li>
+    
+    <li>
+      <span>22/11/2013</span> &raquo;
+      <a href="/security/conheca-o-metasploit-framework">Conheça o Metasploit Framework</a>
+    </li>
+    
+    <li>
+      <span>03/05/2014</span> &raquo;
+      <a href="/development/rails-postgres-e-indices">Rails, PostgreSQL e o uso de índices</a>
+    </li>
+    
+  </ul>
+</section>
+<br />
+<section>
+  <h3>Comentários</h3>
+  <div id="disqus_thread" aria-live="polite">
+    <script type="text/javascript">
+  var disqus_shortname = 'infoslack';
+
+  (function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://infoslack.disqus.com/embed.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  }());
+</script>
+
+  </div>
+</section>
+
+
+      <div class="footer">
+        <div class="contact">
+          <p>
+            Copyright © 2013 - 2014
+          </p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44190365-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </body>
+</html>
