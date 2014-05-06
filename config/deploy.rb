@@ -1,13 +1,21 @@
-require "mina/git"
+lock "3.2.1"
 
-set :domain, "infoslack.com"
+set :application, "infoslack.com"
+set :repository, "./_deploy"
+set :scm, :none
+
+set :use_sudo, false
 set :user, "deploy"
-set :deploy_to, "/var/www/infoslack"
-set :repository, "https://github.com/infoslack/infoslack-jekyll.git"
-set :branch, "deploy"
+set :port, 22
 
-task :deploy do
-  deploy do
-    invoke :"git:clone"
+set :deploy_to, "/var/www/infoslack"
+set :deploy_via, :copy
+set :copy_strategy, :export
+set :keep_releases, 5
+
+namespace :deploy do
+  [:start, :stop, :restart, :finalize_update].each do |t|
+    desc "#{t} task is a no-op with jekyll"
+    task t, roles: :app do; end
   end
 end
