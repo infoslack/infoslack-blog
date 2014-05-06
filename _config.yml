@@ -2,5 +2,5 @@ name: "root@infoslack:~#"
 markdown: rdiscount
 permalink: /:categories/:title
 pygments: true
-destination: ./_deploy
+destination: ./_site
 exclude: [README.md, config]
