@@ -11,6 +11,5 @@ task :deploy do
   deploy do
     invoke :"git:clone"
     invoke :"bundle:install"
-    queue "#{bundle_prefix} jekyll --lsi build"
   end
 end
