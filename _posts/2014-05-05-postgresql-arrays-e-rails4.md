@@ -111,5 +111,5 @@ Happy Hacking ;)
 
 ### Referências
 
-[http://www.postgresql.org/docs/9.3/static/arrays.html](http://www.postgresql.org/docs/9.3/static/arrays.html)
-[https://github.com/rails/rails/pull/7547](https://github.com/rails/rails/pull/7547)
+- [http://www.postgresql.org/docs/9.3/static/arrays.html](http://www.postgresql.org/docs/9.3/static/arrays.html)
+- [https://github.com/rails/rails/pull/7547](https://github.com/rails/rails/pull/7547)
