@@ -60,7 +60,7 @@ O workshop será realizado de segunda a sexta: **15/09/14** a **19/09/14**
 
 Horário: das **20h às 22h**, horário de Brasília
 
-Ambiente: **a definir**
+Ambiente: [TreinaTOM](http://www.treinatom.com.br/pt/)
 
 Carga horária: **10(horas)**
 
