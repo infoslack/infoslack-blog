@@ -56,7 +56,7 @@ segurança de aplicações web.
 Habilidades básicas em ambientes Linux/Unix e desenvolvimento web.
 
 ### Informações
-O workshop será realizado de segunda a sexta: **15/09/14** a **19/09/14**
+<strike>O workshop será realizado de segunda a sexta: **15/09/14** a **19/09/14**</strike>
 
 Horário: das **20h às 22h**, horário de Brasília
 
@@ -67,10 +67,3 @@ Carga horária: **10(horas)**
 Valor: **R$ 350,00**
 
 Vagas limitadas!
-
-### Inscreva-se
-
-<form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
-<input type="hidden" name="itemCode" value="D3C46EF34848EE4554BF4F9A310D82F0" />
-<input type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/205x30-pagar-azul.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
-</form>
