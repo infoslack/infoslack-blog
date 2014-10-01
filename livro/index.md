@@ -1,10 +1,8 @@
 ---
-layout: default
-title: "Livro - Começando com o Linux: Comandos, serviços e administração"
+layout: page
+title: Livro
 keywords: infoslack, linux, livro, daniel romero, comandos
 ---
-
-<h2 align="center"> Conhecer e utilizar Linux é essencial! </h2>
 
 <p align="center"><img src="/images/Linux_large.png" alt="Começando com linux" /></p>
 

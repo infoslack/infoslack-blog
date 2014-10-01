@@ -1,25 +1,25 @@
 ---
 layout: default
 ---
-<h2>{{ page.title }}</h2>
-<p class="meta">{{ page.date | date: '%d/%m/%Y' }}</p>
 
 <div class="post">
-{{ content }}
+  <h1 class="post-title">{{ page.title }}</h1>
+  <span class="post-date">{{ page.date | date: '%d/%m/%Y' }}</span>
+  {{ content }}
 </div>
-<br />
-<section class="read-more">
+
+<section class="related-posts">
   <h3>Leia também</h3>
   <ul>
     {% for post in site.related_posts limit:3 %}
-    <li>
+    <li class="related-posts">
       <span>{{ post.date | date: '%d/%m/%Y' }}</span> &raquo;
       <a href="{{ post.url }}">{{ post.title }}</a>
     </li>
     {% endfor %}
   </ul>
 </section>
-<br />
+
 <section>
   <h3>Comentários</h3>
   <div id="disqus_thread" aria-live="polite">

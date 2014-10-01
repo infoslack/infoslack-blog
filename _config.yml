@@ -1,6 +1,19 @@
-name: "root@infoslack:~#"
+# dependencies
 markdown: rdiscount
-permalink: /:categories/:title
 pygments: true
+
+# links
+permalink: /:categories/:title
+
+# setup
+title: "root@infoslack:~#"
 destination: ./_site
+baseurl: "/"
+paginate: 10
 exclude: [README.md, config, vendor]
+
+# vars
+twitter: https://twitter.com/infoslack
+github: https://github.com/infoslack
+linkedin: https://www.linkedin.com/in/infoslack
+feed: http://infoslack.com/atom.xml
