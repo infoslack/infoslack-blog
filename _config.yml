@@ -10,7 +10,7 @@ title: "root@infoslack:~#"
 destination: ./_site
 baseurl: "/"
 paginate: 10
-exclude: [README.md, config, vendor]
+exclude: [README.md, config, vendor, Gemfile, Gemfile.lock]
 
 # vars
 twitter: https://twitter.com/infoslack
