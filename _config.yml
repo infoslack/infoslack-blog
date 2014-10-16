@@ -13,6 +13,7 @@ paginate: 10
 exclude: [README.md, config, vendor, Gemfile, Gemfile.lock]
 
 # vars
+rubyconf: http://infoslack.com/rubyconf/
 twitter: https://twitter.com/infoslack
 github: https://github.com/infoslack
 linkedin: https://www.linkedin.com/in/infoslack
