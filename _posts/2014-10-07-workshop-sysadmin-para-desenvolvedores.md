@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Workshop - Sysadmin para desenvolvedores"
+description: "Aprenda a configurar um servidor do zero no workshop Sysadmin para desenvolvedores"
 category: server
 keywords: linux, servers, workshop, curso, syadmin, deploy, rails, php, postgresql, git, ruby, mysql, vps
 ---

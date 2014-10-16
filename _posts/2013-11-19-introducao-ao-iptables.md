@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Introdução ao iptables"
+description: "Não tenha medo do iptables, conheça ele com esta breve introdução"
 category: security
 keywords: linux, security, segurança, firewall
 ---

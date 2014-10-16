@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Manipulando a memória RAM e a SWAP"
+description: "Aprenda a controlar a memória RAM e a fazer um melhor uso da SWAP no Linux"
 category: linux
 keywords: linux, ram, swap, kernel
 ---

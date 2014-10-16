@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Compilando o Kernel Linux"
+description: "Aprenda de vez a compilar o Kernel Linux"
 category: linux
 keywords: linux, kernel, compilação, make, modules
 ---

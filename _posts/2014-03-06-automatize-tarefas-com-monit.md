@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Automatize tarefas com monit"
+description: "Deixe o monit trabalhar por você, automatize as tarefas"
 category: server
 keywords: server, linux, unix, services, servidor, monit, alertas, serviços
 ---

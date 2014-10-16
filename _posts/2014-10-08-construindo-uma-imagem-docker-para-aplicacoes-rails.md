@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Construindo uma imagem Docker para aplicações Rails"
+description: "Gere uma imagem Docker para suas aplicações Ruby on Rails"
 category: linux
 keywords: linux, deploy, virtualização, lxc, docker, container, ruby, rails
 ---

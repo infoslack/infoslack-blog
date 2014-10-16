@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Aumentando a segurança das chaves ssh"
+description: "Aumente a segurança da sua conexão ssh, turbinando a criptografia de suas chaves"
 category: security
 keywords: security, hacking, segurança, invasão, server, ssh, keys, openssh
 ---

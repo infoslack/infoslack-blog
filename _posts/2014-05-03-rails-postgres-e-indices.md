@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Rails, PostgreSQL e o uso de índices"
+description: "Aprenda a trabalhar com índices no PostgreSQL e Ruby on Rails"
 category: development
 keywords: rails, postgresql, indexação, desenvolvimento, software
 ---

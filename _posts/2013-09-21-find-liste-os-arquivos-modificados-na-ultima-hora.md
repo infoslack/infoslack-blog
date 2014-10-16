@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Find, liste os arquivos modificados na última hora"
+description: "Encontre todos os arquivos que foram modificados na última hora"
 category: shell
 keywords: linux, shell, find, unix
 ---

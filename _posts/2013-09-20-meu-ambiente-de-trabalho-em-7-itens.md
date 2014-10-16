@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Meu ambiente de trabalho em 7 itens"
+description: "Este é o meu ambiente de trabalho descrito em 7 itens"
 category: geral
 keywords: linux, bash, vim, slackware, git, ruby, ruby on rails, chrome
 ---

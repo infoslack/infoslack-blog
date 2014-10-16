@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Primeiros passos com Docker"
+description: "Aprenda a criar containers portáteis com Docker"
 category: linux
 keywords: linux, kernel, virtualização, lxc, docker, container, modulo, PAAS, SaaS
 ---

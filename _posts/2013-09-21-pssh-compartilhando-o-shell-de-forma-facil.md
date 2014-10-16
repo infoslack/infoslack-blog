@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Pssh - Compartilhando o shell de forma fácil"
+description: "Compartilhe o seu terminal de forma fácil com Pssh"
 category: shell
 keywords: linux, shell, unix, ssh
 ---

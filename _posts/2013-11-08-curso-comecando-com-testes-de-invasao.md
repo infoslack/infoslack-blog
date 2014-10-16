@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Curso - Começando com testes de invasão"
+description: "Aprenda sobre testes de invasão neste curso"
 category: security
 keywords: linux, security, pentest, hacking, invasão, curso, segurança
 ---

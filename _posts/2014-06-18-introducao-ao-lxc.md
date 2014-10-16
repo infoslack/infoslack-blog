@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Introdução ao LXC (LinuX Containers)"
+description: "Conheça o LXC LinuX Containers, uma alternativa a virtualização"
 category: linux
 keywords: linux, kernel, virtualização, lxc, heroku, dyno, container, modulo
 ---

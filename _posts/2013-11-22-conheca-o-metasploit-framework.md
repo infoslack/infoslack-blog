@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Conheça o Metasploit Framework"
+description: "Teste a segurança de suas aplicações, conheça o Metasploit Framework!"
 category: security
 keywords: security, hacking, metasploit, pentest, exploit, segurança, invasão
 ---

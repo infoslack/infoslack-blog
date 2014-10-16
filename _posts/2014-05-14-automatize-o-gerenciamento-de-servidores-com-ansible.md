@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Automatize o gerenciamento de servidores com Ansible"
+description: "Permita que o Ansible gerencie os seus servidores"
 category: server
 keywords: server, linux, unix, services, servidor, ansible, gerenciamento, ssh, provisionamento
 ---

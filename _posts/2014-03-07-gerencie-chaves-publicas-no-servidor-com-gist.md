@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Gerencie chaves públicas no servidor com gist"
+description: "Administre as chaves públicas no seu servidor com gist e github"
 category: server
 keywords: server, linux, unix, services, servidor, gist, github, ssh, keys
 ---

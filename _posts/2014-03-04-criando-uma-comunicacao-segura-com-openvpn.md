@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Criando uma comunicação segura com OpenVPN"
+description: "Faça comunicações seguras utilizando o OpenVPN"
 category: security
 keywords: security, hacking, vpn, ,openvpn, vps, segurança, invasão, privacidade, túnel, criptografia
 ---

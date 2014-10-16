@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Utilizando o recurso de arrays do PostgreSQL com Rails 4"
+description: "Aproveite o recurso de arrays do PostgreSQL no Rails 4"
 category: development
 keywords: rails4, postgresql, arrays, desenvolvimento, software
 ---

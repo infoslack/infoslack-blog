@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Workshop - Web hacking na prática"
+description: "Aprenda de vez sobre web hacking, neste workshop 100% prático"
 category: security
 keywords: linux, security, web hacking, invasão, workshop, curso, segurança, metasploit
 ---

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Replicação Master-Slave com PostgreSQL e Rails"
+description: "Utilize o PostgreSQL com replicação Master-Slave em projetos Rails"
 category: development
 keywords: rails4, postgresql, replication, desenvolvimento, master, slave, octopus
 ---
