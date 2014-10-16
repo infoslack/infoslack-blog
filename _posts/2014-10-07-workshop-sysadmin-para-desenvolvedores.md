@@ -74,12 +74,13 @@ Habilidades básicas em ambientes Linux/Unix.
 * Ambiente: [TreinaTOM](http://www.treinatom.com.br/pt/)
 * Carga horária: **10(horas)**
 * Todas as aulas serão gravas e os vídeos disponibilizados para download
+* Valor: **R$ 350,00**
 * Vagas limitadas!
 
 ### Inscreva-se
-Até o dia **15/10/14** valor com desconto: **R$ 300,00**
+<strike>Até o dia **15/10/14** valor com desconto: **R$ 300,00**</strike>
 
 <form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
-<input type="hidden" name="itemCode" value="F59F2652DBDBAFA334907FAACEB02E43" />
+<input type="hidden" name="itemCode" value="D2D492C5D7D7CA8DD4EA6F85105B5DC4" />
 <input type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/205x30-pagar-azul.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
 </form>
