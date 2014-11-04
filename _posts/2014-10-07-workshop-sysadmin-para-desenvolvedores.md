@@ -78,10 +78,5 @@ Habilidades básicas em ambientes Linux/Unix.
 * Valor: **R$ 350,00**
 * Vagas limitadas!
 
-### Inscreva-se
+<strike>### Inscreva-se</strike>
 <strike>Até o dia **15/10/14** valor com desconto: **R$ 300,00**</strike>
-
-<form action="https://pagseguro.uol.com.br/checkout/v2/cart.html?action=add" method="post">
-<input type="hidden" name="itemCode" value="D2D492C5D7D7CA8DD4EA6F85105B5DC4" />
-<input type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/205x30-pagar-azul.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
-</form>
