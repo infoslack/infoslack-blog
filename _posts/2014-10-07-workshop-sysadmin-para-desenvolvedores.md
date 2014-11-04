@@ -78,5 +78,5 @@ Habilidades básicas em ambientes Linux/Unix.
 * Valor: **R$ 350,00**
 * Vagas limitadas!
 
-<strike>### Inscreva-se</strike>
+### <strike>Inscreva-se</strike>
 <strike>Até o dia **15/10/14** valor com desconto: **R$ 300,00**</strike>
