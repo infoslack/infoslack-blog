@@ -74,7 +74,7 @@ Habilidades básicas em ambientes Linux/Unix.
 * Horário: das **20h às 22h**, horário de Brasília
 * Ambiente: [TreinaTOM](http://www.treinatom.com.br/pt/)
 * Carga horária: **10(horas)**
-* Todas as aulas serão gravas e os vídeos disponibilizados para download
+* Todas as aulas serão gravadas e os vídeos disponibilizados para download
 * Valor: **R$ 350,00**
 * Vagas limitadas!
 
