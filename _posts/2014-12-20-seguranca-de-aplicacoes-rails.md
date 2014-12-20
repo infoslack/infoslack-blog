@@ -74,7 +74,8 @@ Em outro [post](http://infoslack.com/security/conheca-o-metasploit-framework/) e
 fazer esse tipo de teste e provar a existência de vulnerabilidades, 
 o [Metasploit](http://www.metasploit.com/).
 
-Confira um exemplo de uso da ferramenta explorando uma aplicação Rails:
+Confira um exemplo de uso da ferramenta explorando uma aplicação Rails
+e conseguindo acesso total ao servidor:
 
 {% youtube sa6S9a0EhYs %}
 
