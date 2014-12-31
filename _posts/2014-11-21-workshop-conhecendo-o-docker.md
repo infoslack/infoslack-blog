@@ -68,4 +68,6 @@ Habilidades básicas em ambientes Linux/Unix.
 * Vagas limitadas!
 
 ### Inscreva-se
-Até o dia **15/12/14** valor com desconto: **R$ 300,00**
+<strike>Até o dia **15/12/14** valor com desconto: **R$ 300,00**</strike>
+
+Inscrições aqui:[http://infoslack.com/workshops/docker/](http://infoslack.com/workshops/docker/)
