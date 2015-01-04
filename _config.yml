@@ -1,6 +1,6 @@
 # dependencies
 markdown: rdiscount
-pygments: true
+highlighter: pygments
 
 # links
 permalink: /:categories/:title
