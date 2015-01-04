@@ -102,7 +102,7 @@ app:
 		- RAILS_ENV=production
 	volumes:
 		- .:/usr/src/app
-	ports:
+	expose:
 		- 9001
 	links:
 		- db
@@ -111,7 +111,7 @@ web:
 	image: infoslack/nginx-puma
 	volumes_from:
 		- app
-	expose:
+	ports:
 		- 80:80
 	links:
 		- app
