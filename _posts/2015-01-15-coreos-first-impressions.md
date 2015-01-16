@@ -40,14 +40,43 @@ system, CoreOS will perform a rollback and return to use the `A` partition.
 
 ### Etcd
 
-To distribute the data for configuration between nodes in a cluster, the 
-CoreOS distribution use a service called [ETCD](https://github.com/coreos/etcd) which is a global 
-`key-value` scheme responsible for managing the discovery of services, 
-which allows the configuration of dynamic applications.
+One of the main requirements of running a cluster is the ability to 
+communicate between the nodes. CoreOS accomplish that through [ETCD](https://github.com/coreos/etcd), 
+a global `key-value` scheme responsible for managing the discovery 
+of services, which allows us to create dynamic applications.
 
 Application containers running on your cluster can read and write data 
 into etcd. Common examples are storing database connection details, 
 cache settings, feature flags, and [more](https://coreos.com/using-coreos/etcd/).
+
+CoreOS uses a file called `cloud-config` which allows customization of 
+network configurations, systemd units and other OS-level options.
+The file is saved in the `YAML` format and is processed during startup 
+of the machine.
+
+In addition it is responsible for storing the settings that allow for 
+ETCD discover the cluster where the machine should join.
+An example of cloud-config file would look like this:
+
+{% highlight yaml %}
+coreos:
+  etcd:
+	  # generate a new token for each unique 
+	  # cluster from https://discovery.etcd.io/new
+	  discovery: https://discovery.etcd.io/<token>
+
+	  addr: $private_ipv4:4001
+	  peer-addr: $private_ipv4:7001
+ 
+  fleet:
+	  public-ip: $private_ipv4   # used for fleetctl ssh command
+
+  units:
+	  - name: etcd.service
+	    command: start
+	  - name: fleet.service
+	    command: start
+{% endhighlight %}
 
 In each ETCD the client node is running and configured to communicate 
 with other nodes in the cluster:
