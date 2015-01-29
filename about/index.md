@@ -1,28 +1,28 @@
 ---
 layout: page
-title: About
-keywords: infoslack, linux, software, developer, engineer, hacker
+title: Hire me!
+keywords: infoslack, linux, software, developer, engineer, hacker, devops
 ---
 
 ![Daniel Romero](/images/daniel.png)
 
-## Olá, meu nome é Daniel Romero!
+## Hi! I'm Daniel Romero, a hacker and full stack developer.
 
-Tenho mais de 10 anos de experiência com Linux e trabalho com 
-desenvolvimento de software desde 2006, já trabalhei com PHP, Java e 
-atualmente Ruby ♥. 
+I have over 10 years of experience with Linux servers and I have been 
+working with software development since 2006, currently with Ruby and 
+Ruby on Rails ♥.
 
-Tenho uma empresa chamada [Initsec](http://initsec.com) onde ofereço alguns 
-serviços com foco em segurança de aplicações web.
+One of my recent accomplishments is [the book I wrote](http://www.casadocodigo.com.br/products/livro-linux) 
+and also giving a [presentation]({{ site.rubyconf }}) on Metasploit at [RubyConf Brasil](http://www.rubyconf.com.br/en/speakers).
 
-Meu desafio mais recente foi escrever um livro ["Começando com o Linux: Comandos, serviços e administração"](http://www.casadocodigo.com.br/products/livro-linux).
+As a hacker, I'm a [security consultant](http://initsec.com/pentest/) and also hold [workshops on DevOps]({{ site.workshops }}).
 
-### Na web
+### More about me
 
 [Twitter]({{ site.twitter }}) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 [Github]({{ site.github }}) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 [Linkedin]({{ site.linkedin }})
 
-### Contato 
+### Contact
 
-[infoslack@gmail.com](mailto:infoslack@gmail.com) &nbsp;|&nbsp; **Para privacidade:** [GPG key](/about/gpg-key.txt)
+[infoslack@gmail.com](mailto:infoslack@gmail.com) &nbsp;|&nbsp; **For privacy:** [GPG key](/about/gpg-key.txt)
