@@ -6,9 +6,9 @@ category: devops
 keywords: linux, devops, docker, ruby, gem, api, rest, docker-api, postgres
 ---
 
-> In all the posts about Docker, I used the shell to execute the commands, 
-today we will see how to perform the same Docker commands remotely via 
-`REST API` and the power that it can provide.
+> In all my previous posts about Docker, I used the shell to execute the 
+commands, today we will see how to perform the same Docker commands 
+remotely via `REST API` and the power that it can provide.
 
 ### First steps
 
@@ -22,8 +22,8 @@ $ echo "DOCKER_OPTS='-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock'" \
 $ service docker restart
 {% endhighlight %}
 
-As a result of setting the Docker continue working via unix socket and 
-now also answer on port `TCP/IP 2375`.
+After restarting the service, Docker will continue working via unix 
+socket and now also answer on port `TCP/IP 2375`.
 
 For the first test, we can list all the images using the `curl`:
 
@@ -85,7 +85,7 @@ $ curl -X GET http://127.0.0.1:2375/version
 ### Control containers
 
 To create a container, the API supports all the options we use the 
-command terminal. We can create this:
+command terminal. We can create using this command:
 
 {% highlight bash %}
 $ curl -X POST -H "Content-Type: application/json" \
@@ -112,15 +112,14 @@ $ curl -X POST -H "Content-Type: application/json" \
 {"Id":"3e9879113012"}
 {% endhighlight %}
 
-When creating a container API returns its `ID`, you can now initialize 
-the container:
+You can see that the API returned the container's `ID`, you can now 
+initialize this container:
 
 {% highlight bash %}
 $ curl -X POST http://127.0.0.1:2375/containers/3e9879113012/start
 {% endhighlight %}
 
-
-We can check listing the containers that are running:
+We can check the list of containers that are running:
 
 {% highlight bash %}
 $ curl -X GET http://127.0.0.1:2375/containers/json
@@ -169,8 +168,8 @@ $ irb
 2.2.0 (main)>
 {% endhighlight %}
 
-Everything we do using the curl can be done more friendly way, we can 
-create a container like this:
+Everything we do using the curl can be done in a more friendly way, 
+we can create a container like this:
 
 {% highlight bash %}
 2.2.0 (main)> container = Docker::Container.create('Image' => 'postgres:9.3')
@@ -233,7 +232,7 @@ It's amazing the possibilities of what we can build with Docker API,
 will continue exploring more about this in other posts.
 
 If you are interested in playing with the API on other platforms, 
-there are many libraries:
+there are many libraries available:
 
 - Python: [https://github.com/docker/docker-py](https://github.com/docker/docker-py)
 - Java: [https://github.com/kpelykh/docker-java](https://github.com/kpelykh/docker-java)
