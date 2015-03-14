@@ -6,7 +6,7 @@ set :user, "deploy"
 set :deploy_to, "/var/www/infoslack"
 set :repository, "https://github.com/infoslack/infoslack-jekyll.git"
 set :branch, "master"
-set :shared_paths, ["_site/rubyconf", "_site/inscricao.html", "_site/workshops"]
+set :shared_paths, ["_site/rubyconf", "_site/docker", "_site/inscricao.html", "_site/workshops"]
 
 task :setup => :environment do
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/_site/rubyconf"]
