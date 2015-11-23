@@ -2,8 +2,8 @@
 layout: post
 title: "Ansible - variáveis, tags e loops"
 description: "Utilize os recursos de variáveis, tags e loops no Ansible"
-category: server
-keywords: server, linux, unix, services, servidor, ansible, gerenciamento, ssh, provisionamento
+category: devops
+keywords: server, linux, unix, services, servidor, ansible, gerenciamento, ssh, provisionamento, devops
 ---
 
 Este é um complemento do post [anterior](http://infoslack.com/server/automatize-o-gerenciamento-de-servidores-com-ansible/) sobre Ansible, veremos um pouco

@@ -2,8 +2,8 @@
 layout: post
 title: "Primeiros passos com Docker"
 description: "Aprenda a criar containers portáteis com Docker"
-category: linux
-keywords: linux, kernel, virtualização, lxc, docker, container, modulo, PAAS, SaaS
+category: devops
+keywords: linux, kernel, virtualização, lxc, docker, container, modulo, PAAS, SaaS, devops
 ---
 
 [Docker](https://www.docker.com/) é um projeto open-source escrito em [Go](http://golang.org/) que facilita a criação de

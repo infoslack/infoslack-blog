@@ -2,8 +2,8 @@
 layout: post
 title: "Monitore serviços e receba alertas com monit"
 description: "Fique de olho nos serviços e receba alertas no seu e-mail, use Monit"
-category: server
-keywords: server, linux, unix, services, servidor, monit, alertas, serviços
+category: devops
+keywords: server, linux, unix, services, servidor, monit, alertas, serviços, devops
 ---
 
 ### Introdução

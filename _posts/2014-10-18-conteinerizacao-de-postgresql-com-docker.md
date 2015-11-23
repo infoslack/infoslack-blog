@@ -2,7 +2,7 @@
 layout: post
 title: "Conteinerização de PostgreSQL com Docker"
 description: "Criando um container Docker para postgresql e integrando a uma aplicação rails"
-category: linux
+category: devops
 keywords: linux, deploy, virtualização, lxc, docker, container, ruby, rails, postgresql
 ---
 

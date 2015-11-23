@@ -2,8 +2,8 @@
 layout: post
 title: "Construindo uma imagem Docker para aplicações Rails"
 description: "Gere uma imagem Docker para suas aplicações Ruby on Rails"
-category: linux
-keywords: linux, deploy, virtualização, lxc, docker, container, ruby, rails
+category: devops
+keywords: linux, deploy, virtualização, lxc, docker, container, ruby, rails, devops
 ---
 
 Continuando a série sobre Docker, hoje veremos como construir uma imagem Docker

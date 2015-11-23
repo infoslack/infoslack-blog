@@ -2,8 +2,8 @@
 layout: post
 title: "Automatize tarefas com monit"
 description: "Deixe o monit trabalhar por você, automatize as tarefas"
-category: server
-keywords: server, linux, unix, services, servidor, monit, alertas, serviços
+category: devops
+keywords: server, linux, unix, services, servidor, monit, alertas, serviços, devops
 ---
 
 Este é um complemento do [post anterior](http://infoslack.com/server/monitore-servicos-e-receba-alertas-com-monit/) sobre monit e veremos como podemos automatizar

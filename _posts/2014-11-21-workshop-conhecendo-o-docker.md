@@ -2,7 +2,7 @@
 layout: post
 title: "Workshop - Conhecendo o Docker"
 description: "Aprenda a criar e manter containers com Docker, isole aplicações e administre sua infra"
-category: server
+category: geral
 keywords: linux,workshop,curso,syadmin,deploy,rails,postgresql,git,ruby,vps,docker,lxc,container,vms
 ---
 
