@@ -6,10 +6,12 @@ keywords: infoslack, linux, software, developer, engineer, hacker, devops, pales
 
 ### 2015
 
-- [16° GURU-CE - Automatize o provisionamento de servidores com Ansible](http://infoslack.com/ansible)
+- [RubyConf BR 2015 - Ruby on Docker, containerized your Ruby applications](https://infoslack.com/rubyconf2015/docker/)
+- [RubyConf BR 2015 - Criando um cluster com CoreOS e Docker](https://infoslack.com/rubyconf2015/coreos/)
+- [16° GURU-CE - Automatize o provisionamento de servidores com Ansible](https://infoslack.com/ansible)
 - [15° GURU-CE - Segurança on Rails](https://speakerdeck.com/infoslack/seguranca-on-rails)
-- [14° GURU-CE - Conhecendo o Docker](http://infoslack.com/docker)
+- [14° GURU-CE - Conhecendo o Docker](https://infoslack.com/docker)
 
 ### 2014
 
-- [RubyConf BR 2014 - Testando a segurança de suas aplicações com Metasploit framework](http://infoslack.com/metasploit)
+- [RubyConf BR 2014 - Testando a segurança de suas aplicações com Metasploit framework](https://infoslack.com/metasploit)

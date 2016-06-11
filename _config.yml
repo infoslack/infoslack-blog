@@ -1,6 +1,7 @@
 # dependencies
 markdown: rdiscount
 highlighter: pygments
+gems: [jekyll-paginate, jekyll-gist]
 
 # links
 permalink: /:categories/:title
@@ -10,12 +11,12 @@ title: "root@infoslack:~#"
 destination: ./_site
 baseurl: "/"
 paginate: 15
-exclude: [README.md, config, vendor, Gemfile, Gemfile.lock]
+exclude: [README.md, Dockerfile, Gemfile, Gemfile.lock]
 
 # vars
-workshops: http://infoslack.com/workshops/
-rubyconf: http://infoslack.com/rubyconf/
+workshops: https://infoslack.com/workshops/
+rubyconf: https://infoslack.com/rubyconf2015/docker/
 twitter: https://twitter.com/infoslack
 github: https://github.com/infoslack
 linkedin: https://www.linkedin.com/in/infoslack
-feed: http://infoslack.com/atom.xml
+feed: https://infoslack.com/atom.xml

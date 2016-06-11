@@ -1,23 +1,23 @@
 ---
 layout: page
 title: About
-keywords: infoslack, linux, software, developer, engineer, hacker, devops
+keywords: infoslack, linux, software, developer, engineer, hacker, devops, docker, kubernetes, aws, ruby, rails, postgresql
 ---
 
 ![Daniel Romero](/images/daniel.png)
 
-## Hi! I'm Daniel Romero, a hacker and full stack developer.
+## Hi! I'm Daniel Romero.
 
-I have over 10 years of experience with Linux servers and I have been
-working with software development since 2006, currently with Ruby and
-Ruby on Rails ♥.
+I'm a developer, technical writer and currently working with DevOps.
+It has been 12 years since I felt in love with Linux and, while that I
+had the opportunity to work as a developer doing PHP, Java and Ruby.
+
+See more at: [infoslack.pro](http://infoslack.pro)
 
 Some of my recent achievements include writing
-[my first book](http://www.casadocodigo.com.br/products/livro-linux)
-and being invited to deliver a [presentation]({{ site.rubyconf }}) on
-Metasploit at [RubyConf Brazil](http://www.rubyconf.com.br/en/speakers).
-
-As a hacker, I'm a [security consultant](http://initsec.com/pentest/) and also hold [workshops on DevOps]({{ site.workshops }}).
+[my second book](https://www.casadocodigo.com.br/products/livro-docker)
+and being invited to deliver a [presentation]({{ site.rubyconf }}) about
+Docker Containers at [RubyConf Brazil](http://www.rubyconf.com.br/en/speakers).
 
 ### More about me
 

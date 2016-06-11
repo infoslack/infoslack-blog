@@ -1,0 +1,9 @@
+blog:
+  image: .
+  container_name: blog
+  volumes:
+    - /data/ssl/caddy:/root/.caddy
+  ports:
+    - "80:80"
+    - "443:443"
+  command: /usr/sbin/caddy --conf /etc/Caddyfile
