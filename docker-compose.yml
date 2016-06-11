@@ -1,5 +1,5 @@
 blog:
-  image: .
+  build: .
   container_name: blog
   volumes:
     - /data/ssl/caddy:/root/.caddy
