@@ -5,10 +5,10 @@ layout: null
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>infoslack.com</title>
- <link href="http://infoslack.com/atom.xml" rel="self"/>
- <link href="http://infoslack.com/"/>
+ <link href="https://infoslack.com/atom.xml" rel="self"/>
+ <link href="https://infoslack.com/"/>
  <updated>{{ site.time | date_to_xmlschema }}</updated>
- <id>http://infoslack.com/</id>
+ <id>https://infoslack.com/</id>
  <author>
    <name>Daniel Romero</name>
    <email>infoslack@gmail.com</email>
@@ -17,9 +17,9 @@ layout: null
  {% for post in site.posts %}
  <entry>
    <title>{{ post.title }}</title>
-   <link href="http://infoslack.com{{ post.url }}"/>
+   <link href="https://infoslack.com{{ post.url }}"/>
    <updated>{{ post.date | date_to_xmlschema }}</updated>
-   <id>http://infoslack.com{{ post.id }}</id>
+   <id>https://infoslack.com{{ post.id }}</id>
    <content type="html">{{ post.content | xml_escape }}</content>
  </entry>
  {% endfor %}

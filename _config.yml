@@ -9,7 +9,7 @@ permalink: /:categories/:title
 title: "root@infoslack:~#"
 destination: ./_site
 baseurl: "/"
-paginate: 10
+paginate: 15
 exclude: [README.md, config, vendor, Gemfile, Gemfile.lock]
 
 # vars

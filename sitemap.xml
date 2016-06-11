@@ -6,7 +6,7 @@ layout: null
 
   {% for post in site.posts %}
   <url>
-    <loc>http://infoslack.com{{ post.url }}</loc>
+    <loc>https://infoslack.com{{ post.url }}</loc>
     <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
     <changefreq>yearly</changefreq>
     <priority>1.0</priority>
