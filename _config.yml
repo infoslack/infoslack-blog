@@ -11,7 +11,7 @@ title: "root@infoslack:~#"
 destination: ./_site
 baseurl: "/"
 paginate: 15
-exclude: [README.md, Dockerfile, Gemfile, Gemfile.lock]
+exclude: [README.md, Dockerfile, docker-compose.yml, Gemfile, Gemfile.lock]
 
 # vars
 workshops: https://infoslack.com/workshops/
