@@ -13,6 +13,8 @@ baseurl: "/"
 paginate: 15
 exclude: [README.md, Dockerfile, docker-compose.yml, Gemfile, Gemfile.lock]
 
+disqus_shortname: infoslack
+
 # vars
 workshops: https://infoslack.com/workshops/
 rubyconf: https://infoslack.com/rubyconf2015/docker/
