@@ -9,7 +9,8 @@ permalink: /:categories/:title
 # setup
 title: "root@infoslack:~#"
 destination: ./_site
-baseurl: "/"
+url: "https://infoslack.com"
+baseurl: ""
 paginate: 15
 exclude: [README.md, Dockerfile, docker-compose.yml, Gemfile, Gemfile.lock]
 
