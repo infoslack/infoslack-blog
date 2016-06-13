@@ -23,9 +23,9 @@ de alerta informando sobre o incidente.
 No exemplo estou monitorando uma instância Amazon EC2 com Ubuntu 12.04 LTS,
 assumindo que o Nginx está instalado e funcionando, vamos ao trabalho:
 
-{% highlight bash %}
+```bash
 $ sudo apt-get install monit
-{% endhighlight %}
+```
 
 A configuração default do monit fica em `/etc/monit`, temos o `monitrc` que é
 o arquivo de configuração principal e o diretório `conf.d` que  armazena as
@@ -34,13 +34,13 @@ configurações dos serviços que queremos ficar de olho.
 No nosso exemplo vamos ficar de olho no *nginx*, então crie um arquivo chamado
 *nginx.conf* no diretório *conf.d*:
 
-{% highlight bash %}
+```bash
 $ touch /etc/monit/conf.d/nginx.conf
-{% endhighlight %}
+```
 
 A sintaxe do monit é bem simples e muito legível:
 
-{% highlight powershell %}
+```powershell
 set alert infoslack@gmail.com
 
 check host 54.186.55.68 with address 54.186.55.68
@@ -50,7 +50,7 @@ set mailserver smtp.gmail.com port 587
     username "login-gmail" password "password"
     using tlsv1
     with timeout 30 seconds
-{% endhighlight %}
+```
 
 Vamos por partes:
 
@@ -81,13 +81,13 @@ Outra configuração poderia ser feita para verificar o `PID` do *nginx*, ou sej
 ficar de olho no processo do serviço e em caso de interrupção o próprio monit
 executaria uma ação para iniciar o serviço novamente e alertaria:
 
-{% highlight powershell %}
+```powershell
 check process nginx with pidfile /var/run/nginx.pid
     start program = "/etc/init.d/nginx start"
     stop program = "/etc/init.d/nginx stop"
     if failed host 54.186.55.68 port 80 then restart
-{% endhighlight %}
-<br />
+```
+
 ### Finalizando
 
 A [documentação do monit](http://mmonit.com/monit/documentation/monit.html) é muito rica e vale conferir outras opções como por

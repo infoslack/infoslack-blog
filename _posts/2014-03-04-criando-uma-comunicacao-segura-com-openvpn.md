@@ -43,20 +43,20 @@ Para esse exemplo, vou utilizar uma VPS com Ubuntu 12.04 LTS.
 Antes de começar, atualize os repositórios e pacotes instalados, em seguida instale
 o OpenVPN:
 
-{% highlight bash %}
+```bash
 ubuntu@infoslack:~$ sudo apt-get update
 ubuntu@infoslack:~$ sudo apt-get upgrade
 ubuntu@infoslack:~$ sudo apt-get install openvpn
-{% endhighlight %}
+```
 
 O OpenVPN possui ferramentas relacionadas à criptografia o **easy-rsa**, por padrão
 encontra-se no diretório **/usr/share/doc/openvpn/examples/easy-rsa/**, precisamos
 dele em **/etc/openvpn**:
 
-{% highlight bash %}
+```bash
 ubuntu@infoslack:~$ sudo cp -R /usr/share/doc/openvpn/examples/easy-rsa/ \
 /etc/openvpn
-{% endhighlight %}
+```
 
 Agora, precisamos gerar a infraestrutura de chave pública, entre no diretório
 **/etc/openvpn/easy-rsa/2.0/**, crie um link simbólico chamado **openssl.cnf** de
@@ -64,12 +64,12 @@ Agora, precisamos gerar a infraestrutura de chave pública, entre no diretório
 *export KEY_SIZE=1024* para *export KEY_SIZE=2048* pois não queremos gerar chaves
 de 1024 bits, por fim execute o script **vars**:
 
-{% highlight bash %}
+```bash
 ubuntu@infoslack:~$ cd /etc/openvpn/easy-rsa/2.0/
 ubuntu@infoslack:/etc/openvpn/easy-rsa/2.0$ sudo ln -s openssl-1.0.0.cnf \
 openssl.cnf
 ubuntu@infoslack:/etc/openvpn/easy-rsa/2.0$ . /etc/openvpn/easy-rsa/2.0/vars
-{% endhighlight %}
+```
 
 Após rodar o script **vars** ele retornará a seguinte mensagem:
 **NOTE: If you run ./clean-all, I will be doing a rm -rf on /etc/openvpn/easy-rsa/2.0/keys**.
@@ -77,7 +77,7 @@ Após rodar o script **vars** ele retornará a seguinte mensagem:
 Execute o script **clean-all** e em seguida o **build-ca** para gerar os certificados,
 preencha as informações que forem solicitadas:
 
-{% highlight bash %}
+```bash
 $ . /etc/openvpn/easy-rsa/2.0/clean-all
 $ . /etc/openvpn/easy-rsa/2.0/build-ca
 Generating a 2048 bit RSA private key
@@ -100,49 +100,49 @@ Organizational Unit Name (eg, section) [changeme]:
 Common Name (your name or your server hostname) [changeme]:infoslack-server
 Name [changeme]:Admin
 Email Address [mail@host.domain]:root@initsec.com
-{% endhighlight %}
+```
 
 Agora basta gerar a chave privada do servidor e o certificado para ser usado em
 nosso cliente de VPN, ao criar as chaves, preencha os dados que forem solicitados:
 
-{% highlight bash %}
+```bash
 $ . /etc/openvpn/easy-rsa/2.0/build-key-server server
 $ . /etc/openvpn/easy-rsa/2.0/build-key infoslack-client
-{% endhighlight %}
+```
 
 Falta gerar o **Diffie Hellman Parameters** que é o método utilizado pelo OpenVPN
 para troca de chaves, ele irá gerar um arquivo *.pem*, essa tarefa demora um pouco:
 
-{% highlight bash %}
+```bash
 $ . /etc/openvpn/easy-rsa/2.0/build-dh
-{% endhighlight %}
+```
 
 Criamos todas as chaves, precisamos movê-las para o local correto:
 
-{% highlight bash %}
+```bash
 ubuntu@infoslack:/etc/openvpn/easy-rsa/2.0$ cd keys/
 ubuntu@infoslack:/etc/openvpn/easy-rsa/2.0/keys$ cp ca.crt ca.key \
 server.crt server.key dh2048.pem /etc/openvpn/
-{% endhighlight %}
+```
 
 Falta pouco, precisamos dos arquivos de configuração que serão utilizados pelo
 server e cliente na comunicação:
 
-{% highlight bash %}
+```bash
 $ cd /usr/share/doc/openvpn/examples/sample-config-files
 $ gunzip -d server.conf.gz
 $ cp server.conf /etc/openvpn/
-{% endhighlight %}
+```
 
 Separe os arquivos de cliente para serem enviados a sua máquina:
 
-{% highlight bash %}
+```bash
 $ mkdir ~/client
 $ cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf \
 ~/client/
 $ cd /etc/openvpn/easy-rsa/2.0/keys/
 $ cp ca.crt infoslack-client.crt infoslack-client.key ~/client/
-{% endhighlight %}
+```
 
 Edite o arquivo de configuração **client.conf** e altere as informações
 referentes ao endereço do server e as chaves:
@@ -158,10 +158,10 @@ referentes ao endereço do server e as chaves:
 
 Compacte o diretório com os arquivos de cliente e envie para sua máquina:
 
-{% highlight bash %}
+```bash
 $ tar -czvf client.tar.gz client/
 $ scp client.tar.gz daniel@123.456.789.12:/opt
-{% endhighlight %}
+```
 
 Antes de inicializar o serviço do OpenVPN no server, vamos criar um
 redirecionamento de tráfego da internet para a rede privada da VPN, para isso
@@ -170,7 +170,7 @@ edite o arquivo **server.conf** em **/etc/openvpn** e descomente a linha:
 
 Crie um script para configurar o iptables e encaminhar o tráfego através da VPN:
 
-{% highlight shell-session %}
+```shell-session
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
 iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
@@ -181,17 +181,17 @@ iptables -A INPUT -i tun+ -j ACCEPT
 iptables -A FORWARD -i tun+ -j ACCEPT
 iptables -A INPUT -i tap+ -j ACCEPT
 iptables -A FORWARD -i tap+ -j ACCEPT
-{% endhighlight %}
+```
 
 Basicamente o script habilita o módulo **ip_forward** no kernel e cria uma rota
 que envia o tráfego de internet da VPS para o nosso túnel criptografado.
 
 Inicialize o serviço do OpenVPN e execute o script criado:
 
-{% highlight bash %}
+```bash
 $ sudo service openvpn start
 $ sh ~/vpn-route
-{% endhighlight %}
+```
 
 Verifique com o comando **ifconfig** a existência de uma nova interface chamada
 **tun0**.
@@ -199,11 +199,11 @@ Verifique com o comando **ifconfig** a existência de uma nova interface chamada
 Supondo que sua máquina cliente seja linux e com o OpenVPN instalado,
 descompacte os arquivos de configuração de client gerados no server e execute:
 
-{% highlight bash %}
+```bash
 $ mkdir /opt/openvpn
 $ tar zxvf /opt/client.tar.gz -C /opt/openvpn
 $ openvpn --config /opt/openvpn/client/client.conf
-{% endhighlight %}
+```
 
 Caso utilize Mac ou Windows verifique as ferramentas [OpenVPN GUI](http://openvpn.se/)
 e [tunnelblick](https://code.google.com/p/tunnelblick/).
@@ -213,22 +213,22 @@ receberá uma mensagem informando:
 **Initialization Sequence Completed**, agora podemos testar a nossa conexão com
 a VPN e ver se o redirecionamento de tráfego está ok. Para isso utilize o [httpbin](https://github.com/kennethreitz/httpbin):
 
-{% highlight bash %}
+```bash
 $ curl httpbin.org/ip
 {
   "origin": "111.222.333.44"
 }
 $
-{% endhighlight %}
+```
 
 Se o ip retornado for o da sua VPS, significa que o redirecionamento de tráfego
 da VPN está funcionando perfeitamente. Outro teste poderia ser feito utilizando o
 [ifconfig.me](http://ifconfig.me/):
 
-{% highlight bash %}
+```bash
 $ curl ifconfig.me
 111.222.333.44
-{% endhighlight %}
+```
 
 Com a VPN sua conexão estará um pouco mais segura e você não precisará se
 preocupar com as armadilhas das redes wi-fi públicas. =)

@@ -41,16 +41,16 @@ seja menor.
 Durante os testes que fiz utilizei uma instância na Amazon com (*Ubuntu 14.04LTS
 64 bits*), a instalação do LXC é bem simples no ubuntu:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo apt-get install lxc
-{% endhighlight %}
+```
 
 Depois de instalado vamos para a criação do nosso primeiro container, para isso
 usaremos o comando `lxc-create`:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo lxc-create -t ubuntu -n dyno-01
-{% endhighlight %}
+```
 
 O parâmetro `-t` especifica o template que usaremos para criar o container, no
 caso estou especificando o Ubuntu, por padrão o LXC utiliza a última versão LTS.
@@ -60,18 +60,18 @@ Após finalizar a criação do container, podemos listar com `lxc-ls` que retorn
 todos os containers criados, para verificar o atual estado de execução podemos
 usar o comando `lxc-info`:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo lxc-ls
 dyno-01
 ubuntu@heroku:~$ sudo lxc-info -n dyno-01
-Name:           dyno-01
-State:          STOPPED
+Name:    dyno-01
+State:   STOPPED
 ubuntu@heroku:~$
-{% endhighlight %}
+```
 
 Agora que criamos o nosso container, podemos iniciá-lo com `lxc-start`:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo lxc-start -d -n dyno-01
 ubuntu@heroku:~$ sudo lxc-info -n dyno-01
 Name:           dyno-01
@@ -86,22 +86,22 @@ Link:           vethPTIYBW
  RX bytes:      2.04 KiB
  Total bytes:   4.07 KiB
 ubuntu@heroku:~$
-{% endhighlight %}
+```
 
 A opção `-d` que utilizei foi para executar o container em segundo plano, dessa
 forma ele não assume o console e assim podemos nos conectar a ele com
 `lxc-console`:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo lxc-console -n dyno-01
 ubuntu@dyno-01:~$
-{% endhighlight %}
+```
 
 Nesse momento entramos no container `dyno-01` e tudo o que for executado nele
 será de forma isolada do sistema operacional, podemos por exemplo instalar uma
 versão de Ruby em `dyno-01` e verificar o que acontece no host:
 
-{% highlight bash %}
+```bash
 ubuntu@dyno-01:~$ sudo apt-get install wget
 ubuntu@dyno-01:~$ wget http://apt.hellobits.com/hellobits.key
 ubuntu@dyno-01:~$ sudo apt-key add hellobits.key
@@ -111,15 +111,15 @@ ubuntu@dyno-01:~$ sudo apt-get update && sudo apt-get install ruby-2.1
 ubuntu@dyno-01:~$ ruby -v
 ruby 2.1.2p95 (2014-05-08 revision 45877) [x86_64-linux]
 ubuntu@dyno-01:~$ exit
-{% endhighlight %}
+```
 
 Para sair do console do container execute `Ctrl + a` e tecle `q`, agora podemos
 ver o que aconteceu no host:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ ruby -v
 The program 'ruby' can be found in the following packages
-{% endhighlight %}
+```
 
 O ruby que instalamos existe apenas no nosso container `dyno-01`, nada foi
 afetado no nosso host.
@@ -127,14 +127,14 @@ afetado no nosso host.
 Podemos congelar e descongelar containers criados com `lxc-freeze` e
 `lxc-unfreeze`:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo lxc-freeze -n dyno-01
 ubuntu@heroku:~$ sudo lxc-info -n dyno-01 | grep State
-State:          FROZEN
+State:      FROZEN
 ubuntu@heroku:~$ sudo lxc-unfreeze -n dyno-01
 ubuntu@heroku:~$ sudo lxc-info -n dyno-01 | grep State
-State:          RUNNING
-{% endhighlight %}
+State:      RUNNING
+```
 
 É interessante notar a velocidade de execução dessas ações no container.
 
@@ -142,57 +142,57 @@ Outro recurso interessante é o de clonagem, onde podemos fazer uma cópia de um
 container já existente e atribuir um nome diferente, para isso usamos o
 `lxc-clone`:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo lxc-clone -o dyno-01 -n dyno-02
 Created container dyno-02 as copy of dyno-01
 ubuntu@heroku:~$ sudo lxc-ls
 dyno-01  dyno-02
 ubuntu@heroku:~$
-{% endhighlight %}
+```
 
 Como o container `dyno-02` é um clone de `dyno-01` a instalação do ruby feita
 anteriormente consta no novo container:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo lxc-console -n dyno-02
 ubuntu@dyno-02:~$ ruby -v
 ruby 2.1.2p95 (2014-05-08 revision 45877) [x86_64-linux]
-{% endhighlight %}
+```
 
 Até aqui vimos como operar o LXC, veremos agora um pouco de configuração.
 Por padrão o LXC organiza os containers em `/var/lib/lxc`, cada container
 criado possui um diretório com seus arquivos de configuração:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo ls /var/lib/lxc
 dyno-01  dyno-02
 ubuntu@heroku:~$ sudo ls /var/lib/lxc/dyno-01
 config  fstab  rootfs
 ubuntu@heroku:~$
-{% endhighlight %}
+```
 
 Para o próximo exemplo, vamos configurar o container `dyno-01` para que o uso
 de memória dele seja limitado a 512MB, para isso edite o arquivo `config`
 localizado em `/var/lib/lxc/dyno-01` e adicione a seguinte instrução ao final
 do arquivo:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ suco echo "lxc.cgroup.memory.limit_in_bytes = 512M" >> \
 > /var/lib/lxc/dyno-01/config
-{% endhighlight %}
+```
 
 Em seguida reinicie o container em modo de debug para verificarmos o consumo
 de memória feito por `dyno-01`:
 
-{% highlight bash %}
+```bash
 ubuntu@heroku:~$ sudo lxc-stop -n dyno-01
 ubuntu@heroku:~$ sudo lxc-start -d -n dyno-01 -l debug -o dyno01.out
 ubuntu@heroku:~$ cat dyno01.out | grep "memory.limit"
 
-lxc-start 1403131667.309 DEBUG    lxc_cgmanager - \
+lxc-start 1403131667.309 DEBUG  lxc_cgmanager - \
 cgroup 'memory.limit_in_bytes' set to '512M'
 ubuntu@heroku:~$
-{% endhighlight %}
+```
 
 Lembra do cgroups ? Pois é, o que fizemos foi dizer para o Kernel limitar o
 uso de memória feito pelo container `dyno-01` a 512MB.
@@ -200,12 +200,12 @@ uso de memória feito pelo container `dyno-01` a 512MB.
 Agora podemos verificar quanta memória o nosso container está consumindo, isso
 é possível pois o Kernel armazena essas informações em runtime:
 
-{% highlight bash %}
+```bash
 $ sudo cat /sys/fs/cgroup/memory/lxc/dyno-01/memory.usage_in_bytes
 7249920
 $ expr 7249920 / 1024
 7080
-{% endhighlight %}
+```
 
 Ou seja 7080 Kb, dos 512 Mb que configuramos estão em uso.
 

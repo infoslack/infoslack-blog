@@ -1,6 +1,6 @@
 # dependencies
-markdown: rdiscount
-highlighter: pygments
+markdown: kramdown
+highlighter: rouge
 gems: [jekyll-paginate, jekyll-gist]
 
 # links

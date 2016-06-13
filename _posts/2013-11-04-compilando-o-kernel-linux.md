@@ -62,7 +62,7 @@ de configuração.
 
 Veja o exemplo:
 
-{% highlight bash %}
+```bash 
 $ cd /usr/src
 $ ls
 linux@  linux-3.10.17/  linux-3.8.4/
@@ -70,7 +70,7 @@ $ ls -l linux
 lrwxrwxrwx 1 root root 13 Oct 27 15:09 linux -> linux-3.10.17/
 $ cd linux
 $ make menuconfig
-{% endhighlight %}
+```
 
 ![make menuconfig](/images/menuconfig.png)
 
@@ -99,9 +99,9 @@ O que deve ser feito é copiar o arquivo de configuração para o diretório do
 novo kernel que será compilado para servir de base no processo de escolha de
 módulos.
 
-{% highlight bash %}
+```bash 
 $ cp /boot/config /usr/src/linux/.config
-{% endhighlight %}
+```
 
 Após a cópia podemos executar a configuração com `make menuconfig`,
 de forma automática ele utilizará o arquivo `.config` que copiamos de `/boot`.
@@ -121,9 +121,9 @@ correspondentes aos processadores AMD.
 
 Finalizada a configuração basta salvar e partir para a próxima etapa.
 
-{% highlight bash %}
+```bash 
 $ sudo make bzImage
-{% endhighlight %}
+```
 
 Essa é a parte demorada pois depende das escolhas que foram feitas no menu
 de módulos e também do hardware. Após concluída com sucesso o novo kernel
@@ -134,10 +134,10 @@ O novo kernel compilado ficará disponível com o nome de `bzImage`.
 Após o fim da compilação do novo kernel é preciso ainda compilar e instalar os
 módulos:
 
-{% highlight bash %}
+```bash 
 $ sudo make modules
 $ sudo make modules_install
-{% endhighlight %}
+```
 
 Depois de instalar os módulos é necessário copiar os novos arquivos gerados
 no processo de compilação para o boot, são eles: `.config`, `System.map` e
@@ -149,11 +149,11 @@ consulta para verificar os endereços de cada símbolo na memória. Esse arquivo
 
 Copie os arquivos para o `/boot`:
 
-{% highlight bash %}
+```bash 
 $ cp /usr/src/linux/.config /boot/config
 $ cp /usr/src/linux/System.map /boot/System.map
 $ cp /usr/src/linux/arch/x86/boot/bzImage /boot/vmlinuz
-{% endhighlight %}
+```
 
 E para finalizar, é preciso ajustar o gerenciador de boot (grub ou lilo)
 para que ele carregue o novo kernel que foi compilado.
@@ -164,7 +164,7 @@ Tudo o que foi mostrado deve funcionar sem problemas em qualquer distribuição
 Linux. Você pode optar por automatizar esse processo de compilação criando um
 script, no meu caso que uso Slackware mantenho um script como esse:
 
-{% highlight powershell %}
+```powershell 
 #!/bin/bash
 
 VERSION="3.11.7"
@@ -188,7 +188,7 @@ ln -s System.map-$VERSION System.map
 ln -s config-$VERSION config
 
 lilo
-{% endhighlight %}
+```
 
 Pode ser adaptado para uso em outras distribuições sem complicações.
 

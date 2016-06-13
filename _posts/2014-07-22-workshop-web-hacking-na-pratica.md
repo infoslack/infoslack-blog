@@ -20,20 +20,20 @@ Autor do livro "[Começando com o Linux: Comandos, serviços e administração](
 segurança de aplicações web.
 
 ### O que você vai ver:
-<p></p>
+
 #### Antes de começar
 * Protocolo HTTP
 * Servidores Web
 * Aplicações Web
 * Vulnerabilidades mais comuns na web
 * Instalando o Metasploit
-<p></p>
+
 #### Scanning de aplicações web
 * Reconhecimento
 * Scanning de portas
 * Scanning de vulnerabilidades
 * Reconhecendo o alvo com Nmap e Nessus
-<p></p>
+
 #### Exploração de falhas de aplicações web
 * Ataques de SQL injection
 * SQL injection com sqlmap
@@ -42,17 +42,17 @@ segurança de aplicações web.
 * Ataques a sessões
 * Ataques do tipo path traversal
 * Exploração de falhas com Metasploit
-<p></p>
+
 #### Exploração de falhas com foco no usuário
 * Ataque XSS refletido
 * Ataque XSS armazenado
 * Ataques do tipo Cross-site Request Forgery (CSRF)
-<p></p>
+
 #### Proteção
 * Dicas de segurança
 * Correções no servidor
 * Correções na aplicação
-<p></p>
+
 ### Pré-requisitos:
 Habilidades básicas em ambientes Linux/Unix e desenvolvimento web.
 

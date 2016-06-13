@@ -7,11 +7,11 @@ keywords: hacking,hacker,security,segurança,teste,invasão,ruby,rails,metasploi
 ---
 
 Durante o processo de desenvolvimento de uma aplicação temos 1001 coisas
-para nos preocupar, o design de uma API, detalhes do banco de dados, 
-dependências que serão adicionadas ao projeto, estratégias para deploy, 
-infra, etc. A segurança da aplicação acaba sendo apenas mais um detalhe 
-que será esquecido, bugs violentos serão adicionados ao projeto, seja 
-por meio de uma gem que foi inserida, ou por falta de testes ou no pior 
+para nos preocupar, o design de uma API, detalhes do banco de dados,
+dependências que serão adicionadas ao projeto, estratégias para deploy,
+infra, etc. A segurança da aplicação acaba sendo apenas mais um detalhe
+que será esquecido, bugs violentos serão adicionados ao projeto, seja
+por meio de uma gem que foi inserida, ou por falta de testes ou no pior
 dos casos, por falta de atualizações.
 
 Apresento algumas soluções que podem ajudar em 2 casos:
@@ -32,33 +32,33 @@ resultado pode ser uma lista bem grande de bugs caso o projeto esteja bem desatu
 Já no Toobelt é possível testar da mesma forma sem sair da sua zona de conforto,
 adicionando a gem hakiri e gerando um arquivo de manifesto:
 
-{% highlight bash %}
+```bash
 $ gem install hakiri
 $ hakiri manifest:generate
 -----> Generating a manifest file...
        Generated a manifest file in /projects/xpto/manifest.json
        Edit it and run "hakiri system:scan"
-{% endhighlight %}
+```
 
 Depois de editar o arquivo de manifesto e adicionar as informações complementares,
 basta executar a verificação:
 
-{% highlight bash %}
+```bash
 $ hakiri system:scan
 -----> Scanning system for software versions...
        Found Ruby 2.1.3.242
        Found Ruby on Rails 3.2.11
 -----> Searching for vulnerabilities...
        Found 17 vulnerabilities in Ruby on Rails 3.2.11
-      Show all of them? (yes or no)
+       Show all of them? (yes or no)
 
 CVE-2013-0276
 ActiveRecord in Ruby on Rails before 2.3.17, 3.1.x before 3.1.11, and
-3.2.x before 3.2.12 allows remote attackers to bypass the 
-attr_protected protection mechanism and modify protected model 
+3.2.x before 3.2.12 allows remote attackers to bypass the
+attr_protected protection mechanism and modify protected model
 attributes via a crafted request.
 ...
-{% endhighlight %}
+```
 
 É uma verificação que não leva tanto tempo para rodar e pode ser implantada
 junto ao serviço de CI por exemplo.
@@ -70,8 +70,8 @@ Tudo fica mais fácil se você mostra na prática os argumentos para que todos
 ajudem a manter o projeto atualizado. Neste caso minha proposta é simples,
 hackear o projeto e mostrar por A+B que segurança é coisa séria.
 
-Em outro [post](http://infoslack.com/security/conheca-o-metasploit-framework/) escrevi sobre uma das ferramentas que mais gosto para 
-fazer esse tipo de teste e provar a existência de vulnerabilidades, 
+Em outro [post](http://infoslack.com/security/conheca-o-metasploit-framework/) escrevi sobre uma das ferramentas que mais gosto para
+fazer esse tipo de teste e provar a existência de vulnerabilidades,
 o [Metasploit](http://www.metasploit.com/).
 
 Confira um exemplo de uso da ferramenta explorando uma aplicação Rails
@@ -79,14 +79,14 @@ e conseguindo acesso total ao servidor:
 
 {% youtube sa6S9a0EhYs %}
 
-Em janeiro de 2015 a [CVE-2013-0156](http://www.cvedetails.com/cve/2013-0156) que corresponde ao bug explorado 
-na demonstração completa 2 anos e ainda continua bastante ativa na web, 
+Em janeiro de 2015 a [CVE-2013-0156](http://www.cvedetails.com/cve/2013-0156) que corresponde ao bug explorado
+na demonstração completa 2 anos e ainda continua bastante ativa na web,
 o pior em sites conhecidos e grandes aplicações.
 
 ### Finalizando
 
-Agora você não tem mais motivos para adiar as atualizações, lembrando que 
-o mesmo ocorre com atualizações de segurança nos servidores e em outras 
+Agora você não tem mais motivos para adiar as atualizações, lembrando que
+o mesmo ocorre com atualizações de segurança nos servidores e em outras
 partes do seu projeto.
 
 Se precisar de uma consultoria me chama!

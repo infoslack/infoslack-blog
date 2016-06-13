@@ -15,7 +15,7 @@ categoria, o recurso de arrays deve ser ativo na migration com a opção
 `array: true` onde por padrão é atribuído um array vazio. Nossa migration
 ficaria assim:
 
-{% highlight ruby %}
+```ruby
 class CreateProducts < ActiveRecord::Migration
   def change
     create_table :products do |t|
@@ -24,15 +24,15 @@ class CreateProducts < ActiveRecord::Migration
       t.string :categories, array: true, default: []
 
       t.timestamps
-    end
+     end
   end
 end
-{% endhighlight%}
+```
 
 Verificando com o psql podemos ver o tipo `[]` criado pelo Postgres que indica
 que a coluna criada será tratada como um array:
 
-{% highlight sql %}
+```sql
 store_development=# \d products
 
                      Table "public.products"
@@ -44,11 +44,11 @@ categories  character varying(255)[]  default '{}'::character varying[]
 
 Indexes:
 "products_pkey" PRIMARY KEY, btree (id)
-{% endhighlight%}
+```
 
 No rails console podemos testar o comportamento do que foi gerado:
 
-{% highlight ruby %}
+```ruby
 irb(main)> Product.create(
               name: "Book Rails",
               categories:["ruby", "rails", "dev"]
@@ -75,23 +75,23 @@ VALUES ($1, $2, $3, $4) RETURNING "id"
     :created_at => Mon, 05 May 2014 15:33:58 BRT -03:00,
     :updated_at => Mon, 05 May 2014 15:33:58 BRT -03:00
 }
-{% endhighlight%}
+```
 
 Voltando ao psql vamos ver como os dados foram armazenados na tabela:
 
-{% highlight sql %}
+```sql
 store_development=# select * from products;
 
-id |    name    |    categories   |
----+------------+-----------------+
+id |    name    |    categories    |
+---+------------+------------------+
 2  | Book Rails | {ruby,rails,dev} |
 
 (1 row)
-{% endhighlight%}
+```
 
 As consultas podem ser feitas normalmente com o ActiveRecord, nada muda:
 
-{% highlight ruby %}
+```ruby
 irb(main)> Product.where("'ruby' = ANY (categories)")
 
 Product Load (1.0ms)
@@ -104,7 +104,7 @@ ActiveRecord::Relation [
   created_at: "2014-05-05 18:33:58",
   updated_at: "2014-05-05 18:33:58"
 ]
-{% endhighlight%}
+```
 
 Explore ao máximo os recursos e confira as referências.
 

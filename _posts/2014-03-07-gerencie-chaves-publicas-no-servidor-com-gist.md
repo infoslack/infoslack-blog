@@ -29,14 +29,14 @@ chaves públicas de quem deve ser inserido nas configurações como mostra o exe
 Feito isso vamos ao servidor configurar o **cron** para que faça a atualização
 de forma automática, `$ sudo crontab -e`:
 
-{% highlight powershell %}
+```bash
 0 0 * * * mkdir -pm 700 ~/.ssh > /dev/null 2>&1 ; curl -s -w \%{http_code} \
 https://gist.githubusercontent.com/infoslack/867c9e934af23ee8ae6e/raw/\
 9cde7b86acdda0a3f4d74ee801e4a7bae57f2a08/keys_white_list --output \
 ~/.ssh/authorized_keys_dl 2> /dev/null | grep 200 > /dev/null && mv -f \
 ~/.ssh/authorized_keys_dl ~/.ssh/authorized_keys && chmod 600 \
 ~/.ssh/authorized_keys > /dev/null 2>&1
-{% endhighlight %}
+```
 
 Ok é assustador, mas vamos entender esse comando feio primeiro, estou informando
 para o cron que todo dia a meia-noite ele crie o diretório `~/.ssh` com a
@@ -59,7 +59,7 @@ exibir as chaves públicas dos usuários, simples assim:
 Dessa forma em vez de manter um gist com todas as chaves públicas, podemos ter
 uma lista de usuários, nosso script ficaria assim:
 
-{% highlight powershell %}
+```bash
 #!/bin/sh
 
 URL="RAW_URL_PRIVATE_GIST"
@@ -74,13 +74,13 @@ do
 done
 
 mv -f $TMP ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys > $ERR
-{% endhighlight %}
+```
 
 E o *cron* ficaria assim:
 
-{% highlight powershell %}
+```bash
 0 0 * * * /opt/scripts/update_authorized_keys.sh
-{% endhighlight %}
+```
 
 E o gist teria a **whitelist** dos usuários:
 

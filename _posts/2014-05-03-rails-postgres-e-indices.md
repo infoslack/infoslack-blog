@@ -43,7 +43,7 @@ criar de forma explícita.
 
 Quando geramos uma migration:
 
-{% highlight ruby %}
+```ruby
 class CreateUser < ActiveRecord::Migration
   def change
     create_table :users do |t|
@@ -54,11 +54,11 @@ class CreateUser < ActiveRecord::Migration
     end
   end
 end
-{% endhighlight%}
+```
 
 A saída no psql será a seguinte:
 
-{% highlight sql linenos %}
+```sql
 hfh_development=# \d users
 
                         Table "public.users"
@@ -69,7 +69,7 @@ email   character varying(255)  not null
 
 Indexes:
 "users_pkey" PRIMARY KEY, btree (id)
-{% endhighlight %}
+```
 
 Na linha 10 podemos ver que o PostgreSQL adicionou o índice B-tree na chave
 primária, neste exemplo no campo `id`.
@@ -83,7 +83,7 @@ provocam o baixo desempenho em apps Rails.
 
 O uso de índices em relacionamentos poderia ser dessa forma:
 
-{% highlight ruby %}
+```ruby
 class CreateQuestions < ActiveRecord::Migration
   def change
     create_table :questions do |t|
@@ -95,13 +95,13 @@ class CreateQuestions < ActiveRecord::Migration
     end
   end
 end
-{% endhighlight %}
+```
 
 Ao adicionar `index: true` na migration para o relacionamento, o PostgreSQL
 gerou um índice chamado `index_questions_on_category_id` que aponta para o
 campo `category_id`:
 
-{% highlight sql %}
+```sql
 hfh_development=# \d questions
 
                 Table "public.questions"
@@ -114,7 +114,7 @@ category_id integer                 not null
 Indexes:
 "questions_pkey" PRIMARY KEY, btree (id)
 "index_questions_on_category_id" btree (category_id)
-{% endhighlight %}
+```
 
 Isso faz toda diferença nas consultas feitas pela aplicação.
 
@@ -133,8 +133,9 @@ tabela de usuários para saber se já existe algum registro com o e-mail forneci
 , não encontrando nada ele responde que pode prosseguir e acaba permitindo o
 registro de 2 e-mails iguais mandando a validação de unicidade pro espaço.
 
-Para evitar isso, podemos fazer uso de índices de unicidade
-{% highlight ruby %}
+Para evitar isso, podemos fazer uso de índices de unicidade:
+
+```ruby
 class CreateUser < ActiveRecord::Migration
   def change
     create_table :users do |t|
@@ -147,12 +148,12 @@ class CreateUser < ActiveRecord::Migration
     add_index :users, :email, unique: true
   end
 end
-{% endhighlight%}
+```
 
 Adicionando o `unique: true` na migration o PostgreSQL irá gerar o seguinte
 índice no banco:
 
-{% highlight sql linenos %}
+```sql
 hfh_development=# \d users
 
                         Table "public.users"
@@ -164,7 +165,7 @@ email   character varying(255)  not null
 Indexes:
 "users_pkey" PRIMARY KEY, btree (id)
 "index_users_on_email" UNIQUE, btree (email)
-{% endhighlight %}
+```
 
 Agora é possível garantir a integridade dos dados e evitar a duplicação de
 registros.
@@ -180,7 +181,7 @@ tabela contém um campo para marcar perguntas como respondidas (true) ou não
 respondidas (false), podemos criar um índice parcial para filtrar as não
 respondidas e melhorar o desempenho na consulta para exibi-las:
 
-{% highlight ruby %}
+```ruby
 class CreateQuestions < ActiveRecord::Migration
   def change
     create_table :questions do |t|
@@ -194,11 +195,11 @@ class CreateQuestions < ActiveRecord::Migration
     add_index :questions, :answered, where: "answered = false"
   end
 end
-{% endhighlight %}
+```
 
 O PostegreSQL vai gerar o seguinte índice:
 
-{% highlight sql %}
+```sql
 hfh_development=# \d questions
 
                 Table "public.questions"
@@ -211,7 +212,7 @@ answered    boolean                 default false
 Indexes:
 "questions_pkey" PRIMARY KEY, btree (id)
 "index_questions_on_answered" btree (questions) WHERE answered = false
-{% endhighlight %}
+```
 
 Espero que tenha ficado claro a importância do uso de índices.
 Happy Hacking ;)

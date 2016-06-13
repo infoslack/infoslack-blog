@@ -27,14 +27,14 @@ Podemos consultar os sistemas em busca de portas que estejam ouvindo, isso
 pode ser feito de forma manual ao nos conectarmos às portas com o uso de
 ferramentas como o [Netcat](http://netcat.sourceforge.net/):
 
-{% highlight bash %}
+```bash
 $ nc -vv 123.456.789.1 22
 li31-114.members.linode.com [123.456.789.1] 22 (ssh) open
 SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu7
 
 Protocol mismatch.
  sent 1, rcvd 58
-{% endhighlight %}
+```
 
 Note que com este simples teste verificamos que o serviço de `SSH` está
 ativo na porta `22` e depois de estabelecida a conexão, o serviço
@@ -63,14 +63,14 @@ Aproveitando o exemplo anterior onde verificamos a porta do serviço de
 `SSH` de forma manual, no Nmap a porta pode ser especificada com o
 parâmetro `-p` o comando ficaria assim:
 
-{% highlight bash %}
+```bash
 $ nmap -p 22 123.456.789.1
 
 Nmap scan report for (123.456.789.1)
 Host is up (0.10s latency).
 PORT   STATE SERVICE
 22/tcp open  ssh
-{% endhighlight %}
+```
 
 Atualmente firewalls com sistemas de prevenção e [IDS(Intrusion detection system)](https://pt.wikipedia.org/wiki/Sistema_de_detec%C3%A7%C3%A3o_de_intrusos),
 são bem avançados na detecção e bloqueio de tráfego gerado por scanners,
@@ -89,7 +89,7 @@ mais utilizadas:
 nenhuma opção for definida. Esta opção inicia uma conexão `TCP` com o
 alvo, mas não chega a concluir o handshake de três vias:
 
-{% highlight bash %}
+```bash
 $ nmap -sS 123.456.789.1
 
 Starting Nmap 6.47 ( http://nmap.org ) at 2015-06-17 13:20 BRT
@@ -109,7 +109,7 @@ PORT     STATE    SERVICE
 9080/tcp open     glrpc
 
 Nmap done: 1 IP address (1 host up) scanned in 4.94 seconds
-{% endhighlight %}
+```
 
 O Nmap inicia o handshake ao enviar um pacote `SYN` para o alvo e tem
 como resposta um pacote `SYN-ACK` que não será confirmado, com isso a
@@ -135,7 +135,7 @@ fingindo ser uma resposta `ACK` a uma solicitação interna do alvo.
 Como resposta ele lista as portas que não estão sendo filtradas por um
 firewall:
 
-{% highlight bash %}
+```bash
 $ nmap -sA 123.456.789.1
 
 Starting Nmap 6.47 ( http://nmap.org ) at 2015-06-17 13:56 BRT
@@ -147,14 +147,14 @@ PORT     STATE      SERVICE
 7070/tcp unfiltered realserver
 
 Nmap done: 1 IP address (1 host up) scanned in 14.18 seconds
-{% endhighlight %}
+```
 
 Até agora as opções que vimos não nos dão muitos detalhes sobre os
 softwares que estão em uso nas portas, com a opção `-sV` teremos um **Scan
 de versões** onde o Nmap realizará uma conexão completa com o alvo para
 tentar determinar os softwares em uso e, se possível, as versões:
 
-{% highlight bash %}
+```bash
 $ nmap -sV 123.456.789.1
 
 Starting Nmap 6.47 ( http://nmap.org ) at 2015-06-17 14:09 BRT
@@ -175,7 +175,7 @@ PORT     STATE    SERVICE    VERSION
 
 Service detection performed.
 Nmap done: 1 IP address (1 host up) scanned in 175.19 seconds
-{% endhighlight %}
+```
 
 A coleta de informações nesta etapa começa a fazer sentido, já
 conseguimos identificar portas abertas de serviços, o nome dos softwares
@@ -184,7 +184,7 @@ e o principal, as respectivas versões.
 Mas e o sistema operacional? Bem, o Nmap conta com a opção `-O` que pode
 tentar coletar informações e identificar o sistema operacional do alvo:
 
-{% highlight bash %}
+```bash
 $ nmap -sV -O 123.456.789.1
 
 Starting Nmap 6.47 ( http://nmap.org ) at 2015-06-17 14:09 BRT
@@ -208,7 +208,7 @@ OS CPE: cpe:/o:linux:linux_kernel:2.6
 OS details: Linux 2.6.9 - 2.6.33
 
 Nmap done: 1 IP address (1 host up) scanned in 175.19 seconds
-{% endhighlight %}
+```
 
 Bingo! O Nmap informa que a versão do Kernel Linux está entre `2.6.9` e
 `2.6.33`, além disso indica que pode ser vulnerável.

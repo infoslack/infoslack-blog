@@ -19,7 +19,7 @@ Pensando nisso resolvi gerar novas chaves RSA usando 4096 bits, achei que
 ficaria um pouco lento mas não atrapalhou em nada, 2 centésimos de segundo no
 meu uso não faz diferença.
 
-{% highlight bash %}
+```bash
 $ ssh-keygen -t rsa -b 4096
 Generating public/private rsa key pair.
 Enter file in which to save the key (~/.ssh/id_rsa):
@@ -42,17 +42,17 @@ The keys randomart image is:
 |                 |
 +-----------------+
 $
-{% endhighlight %}
+```
 
 Bem, antes de deixar de usar as antigas chaves DSA e removê-las do sistema de
 uma vez, fiz um loop na minha lista de servers para atualizar o `authorized_keys`
 de cada máquina:
 
-{% highlight bash %}
+```bash
 $ for host in `cat ~/.ssh/config | grep '^Host ' | sed 's/Host //'`;
 > do scp ~/configs/authorized_keys $host:.ssh/; done
 $
-{% endhighlight %}
+```
 
 Dessa forma atualizei a chave pública em todos os servers da minha lista, nos
 outros serviços tive que fazer manualmente.

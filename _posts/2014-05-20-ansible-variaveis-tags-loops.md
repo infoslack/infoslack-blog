@@ -15,7 +15,7 @@ Com o uso de [variáveis](http://docs.ansible.com/playbooks_variables.html), sua
 lugar. No exemplo a seguir temos um playbook para instalar o ruby, vamos implementar o
 uso de variáveis:
 
-{% highlight yaml %}
+```yaml
 ---
 - name: Add the key used to Ruby pkg
   apt_key: url=http://apt.hellobits.com/hellobits.key state=present
@@ -28,7 +28,7 @@ uso de variáveis:
 
 - name: Install bundler
   command: gem install bundler --no-rdoc --no-ri
-{% endhighlight%}
+```
 
 Na instalação do ruby queremos escolher o nosso repositório e fornecer a  url
 para o `apt_key`, além disso queremos escolher a versão que será instalada.
@@ -36,14 +36,14 @@ para o `apt_key`, além disso queremos escolher a versão que será instalada.
 Seguindo a organização da nossa configuração do ansible, criaremos um
 diretório chamado `group_vars` e dentro dele um arquivo chamado `all`:
 
-{% highlight sh %}
+```bash
 $ mkdir group_vars
 $ touch group_vars/all
-{% endhighlight%}
+```
 
 A estrutura deverá ficar parecida com a seguinte:
 
-{% highlight sh %}
+```bash
 ├── hosts
 ├── group_vars
 │   └── all
@@ -55,16 +55,16 @@ A estrutura deverá ficar parecida com a seguinte:
 │       └── tasks
 │           └── main.yml
 └── server.yml
-{% endhighlight%}
+```
 
 Agora é possível atribuir valores a variáveis no arquivo `all`:
 
-{% highlight yaml %}
+```yaml
 ---
 # Ruby variables
 ruby_url: http://apt.hellobits.com/hellobits.key
 ruby_version: ruby-2.1
-{% endhighlight%}
+```
 
 Agora que temos as duas variáveis com os valores atribuídos, podemos chamá-las
 no playbook de instalação do ruby:
@@ -84,15 +84,15 @@ instalação do ruby podemos adicionar uma tag e ver como funciona:
 
 Agora podemos executar somente a tarefa de instalação do ruby:
 
-{% highlight sh %}
+```bash
 $ ansible-playbook -i hosts server.yml --tags "ruby"
-{% endhighlight%}
+```
 
 Ou podemos executar todas as tarefas menos a de instalação do ruby:
 
-{% highlight sh %}
+```bash
 $ ansible-playbook -i hosts server.yml --skip-tags "ruby"
-{% endhighlight%}
+```
 
 ### Implementando loops
 

@@ -22,7 +22,7 @@ Para começar, no host teremos um diretório com o Dockerfile e alguns arquivos 
 do Nginx que serão utilizados na construção da imagem. No arquivo Dockerfile teremos as
 instruções base para instalar o Nginx e o Ruby:
 
-{% highlight bash %}
+```bash
 FROM ubuntu:trusty
 
 # Update the repository
@@ -49,38 +49,38 @@ RUN gem install bundler
 # Copy Nginx files
 ADD nginx.conf /etc/nginx/nginx.conf
 ADD myapp.conf /etc/nginx/sites/myapp.conf
-{% endhighlight %}
+```
 
 A novidade no Dockerfile é o `ADD` que copia arquivos locais no host para
 o PATH na imagem que será preparada. Com esse modelo já podemos criar nossa
 imagem e testar:
 
-{% highlight bash %}
+```bash
 $ docker build -t docker_on_rails .
-{% endhighlight %}
+```
 
 O nome dado a imagem foi `docker_on_rails`, se verificarmos as imagens disponíveis
 veremos a base que é o Ubuntu 14.04 (trusty) e a nossa imagem:
 
-{% highlight bash %}
+```bash
 $ docker images
 
 REPOSITORY        TAG      IMAGE ID       CREATED        VIRTUAL SIZE
 docker_on_rails   latest   7f947af605e8   3 minutes ago  385.1 MB
 ubuntu            trusty   6b4e8a7373fe   6 days ago     194.8 MB
-{% endhighlight %}
+```
 
 Podemos conferir nossa instalação criando um container apartir da nossa imagem,
 para isso:
 
-{% highlight bash %}
+```bash
 $ docker run --rm -i -t docker_on_rails /bin/bash
 root@3cefe7708ace:/# ruby -v
 ruby 2.1.3p242 (2014-09-19 revision 47630) [x86_64-linux]
 root@3cefe7708ace:/# nginx -v
 nginx version: nginx/1.6.2
 root@3cefe7708ace:/#
-{% endhighlight %}
+```
 
 Tudo foi instalado corretamente.
 
@@ -88,34 +88,34 @@ Tudo foi instalado corretamente.
 
 Com base na imagem criada, poderiamos inicializar um container em background:
 
-{% highlight bash %}
+```bash
 $ docker run -d -p 80:80 docker_on_rails
-{% endhighlight %}
+```
 
 Porém teriamos que passar instruções ainda para inicializar o nginx, em vez disso
 vamos melhorar o Dockerfile para que ele faça o mapeamento da porta 80 e possa
 inicializar o Nginx sempre que um container for criado:
 
-{% highlight bash %}
+```bash
 ...
 # Ports
 EXPOSE 80
 
 # Start nginx
 CMD ["/usr/sbin/nginx","-c","/etc/nginx/nginx.conf","-g","daemon off;"]
-{% endhighlight %}
+```
 
 Para que essa alteração possa valer, precisamos atualizar nossa imagem:
 
-{% highlight bash %}
+```bash
 $ docker build -t docker_on_rails .
-{% endhighlight %}
+```
 
 E para o container conseguir ler os arquivos da aplicação rails que vai
 ficar sempre disponível no host, podemos utilizar a diretiva `WORKDIR` no
 Dockerfile:
 
-{% highlight bash %}
+```bash
 ...
 # set workdir
 WORKDIR /home/ubuntu/my_app
@@ -123,25 +123,25 @@ WORKDIR /home/ubuntu/my_app
 # Ports
 EXPOSE 80
 ...
-{% endhighlight %}
+```
 
 Podemos aproveitar e informar no Dockerfile onde ele deverá replicar os arquivos
 lidos em `WORKDIR`, como as regras do Nginx estão apontando para `/var/www`, a
 configuração poderia ser assim:
 
-{% highlight bash %}
+```bash
 ...
 # set workdir
 WORKDIR /home/ubuntu/my_app
 ADD . /var/www/my_app/
 ...
-{% endhighlight %}
+```
 
 Depois de gerar a imagem novamente e acessar o container é possível verificar
 que os arquivos relacionados a aplicação rails estão sendo exibidos em
 `/var/www/my_app`:
 
-{% highlight bash %}
+```bash
 $ docker build -t docker_on_rails .
 $ docker run --rm -i -t docker_on_rails /bin/bash
 $ ll /var/www/my_app/
@@ -167,16 +167,16 @@ drwxr-xr-x  2 root     root     4096 Oct  8 04:22 public/
 drwxr-xr-x  8 root     root     4096 Oct  8 04:22 test/
 drwxr-xr-x  6 root     root     4096 Oct  8 04:22 tmp/
 drwxr-xr-x  3 root     root     4096 Oct  8 04:22 vendor/
-{% endhighlight %}
+```
 
 Para testar a nova imagem e a aplicação funcionando, basta criar um novo container:
 
-{% highlight bash %}
+```bash
 $ docker run -p 80:80 -i -t docker_on_rails /bin/bash
 $ cd /var/www/my_app/
 $ bundle install
 $ bundle exec unicorn -c config/unicorn.rb
-{% endhighlight %}
+```
 
 ![Rails app run Docker](/images/rails-app-ok.png)
 

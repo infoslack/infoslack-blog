@@ -18,7 +18,7 @@ sobre como trabalhar com o Docker vamos ao que interessa, o primeiro passo
 aqui será construir nossa imagem Docker para trabalhar com o PostgreSQL,
 vamos analisar o Dockerfile:
 
-{% highlight bash %}
+```bash
 FROM ubuntu:trusty
 
 RUN locale-gen en_US.UTF-8
@@ -48,7 +48,7 @@ VOLUME ["/var/lib/postgresql"]
 EXPOSE 5432
 
 CMD ["/usr/local/bin/run"]
-{% endhighlight %}
+```
 
 A novidade aqui é o `VOLUME` que é um recurso do Docker para especificar
 um diretório que pode ser persistido ou compartilhado dentro do **container**.
@@ -59,7 +59,7 @@ Para gerar a imagem estou informando no Dockerfile que ele deve copiar
 alguns arquivos de configuração do Postgresql durante a instalação. Vamos
 conferir o script de inicialização do postgres:
 
-{% highlight bash %}
+```bash
 #!/bin/bash
 set -e
 
@@ -79,7 +79,7 @@ if [ ! -d $POSTGRESQL_DATA ]; then
 mkdir -p $POSTGRESQL_DATA
 chown -R postgres:postgres $POSTGRESQL_DATA
 sudo -u postgres /usr/lib/postgresql/9.3/bin/initdb \
-                 -D $POSTGRESQL_DATA -E 'UTF-8'
+     -D $POSTGRESQL_DATA -E 'UTF-8'
 fi
 
 $POSTGRESQL_SINGLE <<< "CREATE USER $POSTGRESQL_USER WITH SUPERUSER;" \
@@ -94,7 +94,7 @@ $POSTGRESQL_SINGLE <<< "CREATE DATABASE $POSTGRESQL_DB OWNER
 
 exec sudo -u postgres $POSTGRESQL_BIN \
                       --config-file=$POSTGRESQL_CONFIG_FILE
-{% endhighlight %}
+```
 
 No script temos algumas variáveis ambiente para criar um banco, usuário e
 senha default, caso essas informações não sejam passadas na criação do
@@ -105,28 +105,28 @@ para este usuário. Todos recebem o nome **docker** por padrão.
 
 Criando a imagem utilizando o Dockerfile:
 
-{% highlight bash %}
+```bash
 $ docker build -t ex_postgresql .
-{% endhighlight %}
+```
 
 ### Criando e acessando o container
 
 Agora que a imagem foi gerada, podemos criar o nosso container e acessar
 o PostgreSQL pelo host:
 
-{% highlight bash %}
+```bash
 $ docker run -d -p 5432:5432 \
   -e POSTGRESQL_USER=test \
   -e POSTGRESQL_PASS=test123 \
   -e POSTGRESQL_DB=test \
   ex_postgresql
-{% endhighlight %}
+```
 
 Durante a criação do container estou passando valores as variáveis do
 script de inicialização, agora poderei ter acesso ao postgres que está
 em execução no container partindo do host:
 
-{% highlight bash %}
+```bash
 $ psql -h localhost -U test test
 Password for user test:
 psql (9.3.3, server 9.3.5)
@@ -134,12 +134,12 @@ SSL connection (cipher: DHE-RSA-AES256-SHA, bits: 256)
 Type "help" for help.
 
 test=#
-{% endhighlight %}
+```
 
 Claro que o acesso pode ser feito utilizando o ip privado do container,
 neste caso:
 
-{% highlight bash %}
+```bash
 $ docker ps -q
 1b8f91a297a8
 $ docker inspect 1b8f91a297a8 | grep IPAddress
@@ -151,14 +151,14 @@ SSL connection (cipher: DHE-RSA-AES256-SHA, bits: 256)
 Type "help" for help.
 
 test=#
-{% endhighlight %}
+```
 
 No post sobre [gerar uma imagem docker para um projeto rails](http://infoslack.com/linux/construindo-uma-imagem-docker-para-aplicacoes-rails/), eu havia
 criado um container para executar a aplicação, agora podemos fazer uma
 pequena integração entre os containers, neste caso basta alterar o `database.yml`
 do projeto e passar o ip do nosso container postgres:
 
-{% highlight yaml %}
+```yaml
 production:
   adapter: postgresql
   encoding: unicode
@@ -168,7 +168,7 @@ production:
   host: 172.17.0.9
   port: 5432
   database: test
-{% endhighlight %}
+```
 
 Além dos containers manterem uma comunicação entre si, estão liberando
 acesso pelas portas definidas na criação, no caso a `80` no container onde
@@ -181,15 +181,15 @@ isso significa que os dados do postgresql serão persistidos nesse diretório
 dentro do container, podemos ter acesso a esses dados utilizando a opção
 `--volumes-from`:
 
-{% highlight bash %}
+```bash
 $ docker run -d --volumes-from 340c8f4450a0 --name db-test ex_postgresql
-{% endhighlight %}
+```
 
 Desta forma estaremos criando um novo container mapeando o acesso ao volume
 do container onde o postgresql está rodando, podemos verificar se os arquivos
 realmente estão sendo persistidos no novo container:
 
-{% highlight bash %}
+```bash
 $ docker run -it --volumes-from 340c8f4450a0 \
                  --name db-test ex_postgresql /bin/bash
 root@4a691f90f11a:/# ll /var/lib/postgresql/9.3/main/
@@ -212,15 +212,15 @@ drwx------  2 postgres postgres 4096 Oct 18 13:37 pg_twophase/
 drwx------  3 postgres postgres 4096 Oct 18 13:37 pg_xlog/
 -rw-------  1 postgres postgres   94 Oct 18 15:48 postmaster.opts
 root@4a691f90f11a:/#
-{% endhighlight %}
+```
 
 Agora que temos acesso ao volume do container postgresql, podemos trabalhar
 com backups:
 
-{% highlight bash %}
+```bash
 $ docker run --volumes-from 340c8f4450a0 -v $(pwd):/backup ex_postgresql \
              tar cvf /backup/backup.tar /var/lib/postgresql
-{% endhighlight %}
+```
 
 Com isso estamos criando um novo container que terá acesso ao volume do
 postgresql e executará uma instrução copiando os arquivos para o diretório
@@ -231,16 +231,16 @@ Para executar um restore do backup feito em um novo container, podemos
 primeiro criar um novo container com base na imagem do postgresql,
 opcionalmente, podemos informar o novo volume com `-v`:
 
-{% highlight bash %}
+```bash
 $ docker run -v /var/lib/postgresql --name test2 ex_postgresql /bin/bash
-{% endhighlight %}
+```
 
 Em seguida podemos restaurar o backup no container `test2` que foi criado:
 
-{% highlight bash %}
+```bash
 $ docker run --volumes-from test2 -v $(pwd):/backup busybox \
              tar xvf /backup/backup.tar
-{% endhighlight %}
+```
 
 Se preferir confira o projeto [docker-backup](https://github.com/docker-infra/docker-backup) para automatizar esse processo.
 

@@ -57,7 +57,7 @@ por [RSnake](https://twitter.com/rsnake). Basicamente por meio de brute-force e 
 scanner tenta descobrir detalhes do alvo como o IP do host, mesmo que
 este seja camuflado com um CDN:
 
-{% highlight bash linenos %}
+```bash
 root@labs:~# perl fierce.pl -dns dominioalvo.com.br
 
 DNS Servers for dominioalvo.com.br:
@@ -85,7 +85,7 @@ Done with Fierce scan: http://ha.ckers.org/fierce/
 Found 2 entries.
 
 Have a nice day.
-{% endhighlight %}
+```
 
 Perceba que na linha `17` o scanner encontrou uma resposta diferente para
 o subdomínio `app` identificando o ip `54.321.12.34` que não tem

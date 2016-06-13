@@ -22,27 +22,27 @@ O Pssh quando executado, gera uma URL que, quando acessada via browser na porta 
 
 Para instalar o Pssh você só vai precisar do Ruby versão 1.9.X ou mais recente:
 
-{% highlight bash %}
+```bash 
 $ gem install pssh
-{% endhighlight %}
+```
 
 Opções de uso podem ser vistas com o parâmetro -h:
 
-{% highlight bash %}
+```bash 
 $ pssh -h
-{% endhighlight %}
+```
 
 A opção `--readonly` libera uma sessão para somente leitura, não existe interação com o shell:
 
-{% highlight bash %}
+```bash 
 $ pssh --readonly
-{% endhighlight %}
+```
 
 O parâmetro `-p` possibilita modificarmos a porta default que é `8022`:
 
-{% highlight bash %}
+```bash 
 $ pssh -p 5000
-{% endhighlight %}
+```
 
 Se você faz uso de algum multiplexador como tmux ou screen, o Pssh pode ser combinado com eles:
 

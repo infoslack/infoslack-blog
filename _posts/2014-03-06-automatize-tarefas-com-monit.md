@@ -18,7 +18,7 @@ caso reiniciar o *Unicorn*.
 Tenho um arquivo de [upstart](http://upstart.ubuntu.com/) com instruções para inicializar o *Unicorn* e
 dar o start na minha aplicação:
 
-{% highlight powershell %}
+```powershell
 description "rails_app server config"
 
 pre-start script
@@ -36,7 +36,7 @@ exec sudo -u www-data sh -c "cd /var/www/rails_app/current && \
 bundle exec unicorn -c /etc/unicorn/rails_app.conf"
 
 respawn
-{% endhighlight %}
+```
 
 Com o *upstart* posso executar chamadas para minha aplicação `sudo (start|stop|restart) rails_app`
 sendo assim, agora posso explicar para o monit o que ele deve fazer.
@@ -47,11 +47,11 @@ quando executar a ação de restart.
 
 Nossa configuração do monit ficará assim:
 
-{% highlight powershell %}
+```powershell
 check file restart.txt with path /var/www/rails_app/shared/restart.txt
   if changed timestamp
     then exec "/usr/sbin restart rails_app"
-{% endhighlight %}
+```
 
 O monit vai ficar de olho no arquivo *restart.txt* no diretório
 `/var/www/rails_app/shared` e sempre que ele sofrer alteração em seu timestamp

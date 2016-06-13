@@ -24,54 +24,54 @@ Autor do livro "[Começando com o Linux: Comandos, serviços e administração](
 segurança de aplicações web.
 
 ### O que você vai ver no curso:
-<br>
+
 #### Segurança da informação
 * Princípios básicos
 * Tipos de ameaças
 * Tipos de ataques
 * Proteção
 * Serviços
-<br>
+
 #### Teste de invasão
 * Escopo do teste
 * Tipos de pentest
 * Ciclo de um ataque
 * Categorias de ataque
 * Gerando relatório
-<br>
+
 #### Levantando informações
 * Google hacking
 * Footprint
 * Whois, nslookup, dig
 * Entradas DNS
 * Engenharia Social
-<br>
+
 #### Mapeando informações e serviços
 * Buscando hosts
 * Varrendo portas
 * Identificando serviços
 * Verificando o SO
 * nmap, hping3, traceroute
-<br>
+
 #### Listando vulnerabilidades
 * Verificando servidores
 * Vulnerabilidades em aplicações web
 * Testando o SO
 * nessus, openvas, nikto, exploitdb, metasploit
-<br>
+
 #### Explorando vulnerabilidades
 * Anonimato
 * Testando o sistema
 * Atacando desktop e servidores
 * Atacando aplicações web
 * Apagando rastros
-<br>
+
 
 ### Pré-requisitos
 Conhecimentos em Linux, TCP/IP e desenvolvimento web.
 
 ### Informações
-<strike>O curso será realizado de segunda a sexta: **06/01/14** a **15/01/14**</strike>
+<strike>O curso será realizado de segunda a sexta: 06/01/14 a 15/01/14 </strike>
 
 Horário: das **20h às 23h**, horário de Brasília
 

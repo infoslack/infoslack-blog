@@ -8,9 +8,9 @@ keywords: linux, shell, find, unix
 
 Usando o `find` para listar os arquivos que foram modificados na última hora:
 
-{% highlight bash %}
+```bash
 $ find . -mtime -1
-{% endhighlight %}<br />
+```
 
 * o `.` é o path para a busca
 * `-mtime` parâmetro de tempo

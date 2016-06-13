@@ -94,34 +94,34 @@ arquivos que serão utilizados no unikernel.
 
 No Ubuntu a instalação pode ser feita da seguinte forma:
 
-{% highlight bash %}
+```bash
 $ sudo apt-get install -y \
     qemu-kvm \
     libvirt-bin \
     ubuntu-vm-builder \
     bridge-utils \
     genisoimage
-{% endhighlight %}
+```
 
 Para prosseguir você pode clonar o projeto de demonstração:
 
-{% highlight bash %}
+```bash
 $ git clone git@github.com:infoslack/unikernel-demo.git
-{% endhighlight %}
+```
 
 Em seguida podemos pegar uma imagem Docker que contém alguns *Rump Kernels*
 pré-construídos, incluindo o do Nginx.
 
-{% highlight bash %}
+```bash
 $ docker pull mato/rumprun-packages-hw-x86_64
-{% endhighlight %}
+```
 
 A primeira coisa a ser feita é criar um container que será responsável por
 compilar o unikernel para o Nginx:
 
-{% highlight bash %}
+```bash
 $ docker run -ti -d --name=nginx-build mato/rumprun-packages-hw-x86_64:dceu2015-demo cat
-{% endhighlight %}
+```
 
 Se estiver curioso, este é o [Dockerfile](https://github.com/mato/rumprun-docker-builds/blob/dceu2015-demo/packages-hw-x86_64/Dockerfile) utilizado para gerar a imagem
 que acabamos de usar.
@@ -139,55 +139,55 @@ biblioteca padrão, neste caso o Rump Kernels.
 
 Copie o módulo para dentro do container de build e compile:
 
-{% highlight bash %}
+```bash
 $ docker cp rumprun-setdns.c nginx-build:/build/rumprun-setdns.c
 $ docker exec nginx-build x86_64-rumprun-netbsd-gcc \
     -O2 \
     -Wall \
     -o rumprun-setdns rumprun-setdns.c
-{% endhighlight %}
+```
 
 Agora podemos gerar o binário do nosso unikernel, incluindo o módulo que
 foi compilado:
 
-{% highlight bash %}
+```bash
 $ docker exec nginx-build rumprun-bake \
     hw_virtio /build/nginx.bin \
     /build/rumprun-setdns \
     /build/rumprun-packages/nginx/bin/nginx
-{% endhighlight %}
+```
 
 O resultado final é um binário chamado `nginx.bin` de aproximadamente 5MB,
 usaremos esse binário para inicializar o unikernel, então precisamos copiar
 do container de build para nossa máquina, por fim podemos destruir o container
 de build:
 
-{% highlight bash %}
+```bash
 $ docker cp nginx-build:/build/nginx.bin .
 $ docker rm -f nginx-build
-{% endhighlight %}
+```
 
 Na última etapa de configuração é necessário compactar o binário
 `nginx.bin`, gerar as imagens *ISO* dos sistemas de arquivos que contém a
 estrutura necessária para o funcionamento do Nginx e criar a imagem que
 será usada pelo Docker na construção do container do nosso unikernel:
 
-{% highlight bash %}
+```bash
 $ cat nginx.bin | bzip2 > nginx.bin.bz2
 $ genisoimage -l -r -o fs/etc.iso fs/etc
 $ genisoimage -l -r -o fs/data.iso fs/data
 $ docker build -t unikernel/nginx .
-{% endhighlight %}
+```
 
 Antes de inicializar o unikernel, vamos criar um container com uma
 aplicação simples de resolução de *DNS* entre nossa máquina host e o
 container:
 
-{% highlight bash %}
+```bash
 $ docker run -d --hostname resolvable \
     -v /var/run/docker.sock:/tmp/docker.sock \
     -v /etc/resolv.conf:/tmp/resolv.conf mgood/resolvable
-{% endhighlight %}
+```
 
 Lembra do módulo `rumprun-setdns` que compilamos ? Ele vai receber
 informações passadas por esse container e ajustar as configurações de
@@ -196,19 +196,19 @@ DNS do nosso unikernel.
 Finalmente podemos inicializar o unikernel por meio do utilitário
 `docker-unikernel`, presente no repositório de demonstração:
 
-{% highlight bash %}
+```bash
 $ ./docker-unikernel run -P --hostname nginx unikernel/nginx
 INFO: Container id: fbbe0371bc3c
 INFO: Created netns fbbe0371bc3c for 31766
 INFO: IP address: 172.17.0.3/16 Gateway: 172.17.0.1
 INFO: TAP device: /sys/devices/virtual/net/vtap110003/tap2/dev (240:1)
 INFO: Devices cgroup: /sys/fs/cgroup/devices/docker/fbbe0371bc3c
-{% endhighlight %}
+```
 
 Para testar, podemos simplesmente acessar no browser o caminho `http://nginx`
 ou fazer uma requisição via `curl`:
 
-{% highlight bash %}
+```bash
 $ curl -I nginx
     HTTP/1.1 200 OK
     Server: nginx/1.8.0
@@ -219,7 +219,7 @@ $ curl -I nginx
     Connection: keep-alive
     ETag: "56a3f901-24c"
     Accept-Ranges: bytes
-{% endhighlight %}
+```
 
 Podemos verificar o processo do KVM em execução com a instrução:
 `ps -ef | grep qemu`.
@@ -228,7 +228,7 @@ O que acontece por baixo dos panos é que o Docker inicializa uma *VM*
 com base no *Rump Kernels* usando o *KVM* e removendo o que for
 desnecessário, como por exemplo o suporte gráfico:
 
-{% highlight bash %}
+```bash
 $ qemu-system-x86_64 \
     -enable-kvm \
     -cpu host,migratable=no,+invtsc \
@@ -239,7 +239,7 @@ $ qemu-system-x86_64 \
     -drive if=virtio,file=etc.iso,format=raw \
     -drive if=virtio,file=data.iso,format=raw
 ...
-{% endhighlight %}
+```
 
 Entre as configurações, note o uso do binário que geramos `nginx.bin` como
 kernel e a declaração de filesystem para as estruturas necessárias ao
@@ -249,14 +249,14 @@ completa em `nginx/run.sh`.
 O exemplo detalhado aqui foi apenas para fins didáticos, você pode reproduzir
 de maneira rápida em poucos passos:
 
-{% highlight bash %}
+```bash
 $ git clone git@github.com:infoslack/unikernel-demo.git
 $ cd unikernel-demo
 $ make pull
 $ make
 $ make rundns
 $ ./docker-unikernel run -P --hostname nginx unikernel/nginx
-{% endhighlight %}
+```
 
 ### Conclusão
 
