@@ -1,7 +1,7 @@
 # dependencies
 markdown: kramdown
 highlighter: rouge
-gems: [jekyll-paginate, jekyll-gist]
+gems: [jekyll-gist]
 
 # links
 permalink: /:categories/:title
@@ -11,7 +11,6 @@ title: "root@infoslack:~#"
 destination: ./_site
 url: "https://infoslack.com"
 baseurl: ""
-paginate: 15
 exclude: [README.md, Dockerfile, docker-compose.yml, Gemfile, Gemfile.lock]
 
 disqus_shortname: infoslack

@@ -6,7 +6,7 @@ keywords: linux, ruby, rails, vim, pentest, hacking, hacker, sysadmin, developer
 ---
 
 <div class="posts">
-  {% for post in paginator.posts %}
+  {% for post in site.posts %}
     <div class="post post-preview">
       <h1 class="post-title">
         <a href="{{ post.url }}">
@@ -16,22 +16,4 @@ keywords: linux, ruby, rails, vim, pentest, hacking, hacker, sysadmin, developer
       <span class="post-date">{{ post.date | date: '%d/%m/%Y' }}</span>
     </div>
   {% endfor %}
-
-</div>
-
-<div class="pagination">
-  {% if paginator.next_page %}
-    <a class="pagination-item older" href="{{ site.baseurl }}page{{paginator.next_page}}">mais antigas</a>
-  {% else %}
-    <span class="pagination-item older">mais antigas</span>
-  {% endif %}
-  {% if paginator.previous_page %}
-    {% if paginator.page == 2 %}
-      <a class="pagination-item newer" href="{{ site.baseurl }}">mais recentes</a>
-    {% else %}
-      <a class="pagination-item newer" href="{{ site.baseurl }}page{{paginator.previous_page}}">mais recentes</a>
-    {% endif %}
-  {% else %}
-    <span class="pagination-item newer">mais recentes</span>
-  {% endif %}
 </div>
