@@ -92,7 +92,7 @@ O *ReplicationController* é uma outra forma de criar *pods* que podem ser escal
 receita descrevemos a quantidade de cópias do *pod* que sempre devem existir no cluster, ou seja se por algum motivo
 um container falhar um outro container poderá ser iniciado e assumir o seu lugar mantendo o serviço sempre em execução.
 
-Imagine que sua aplicação precisa ficar online com um número mínimo de containers para garanti disponibilidade,
+Imagine que sua aplicação precisa ficar online com um número mínimo de containers para garantir disponibilidade,
 a receita de replication controller poderia ser assim:
 
 ```yaml
@@ -144,7 +144,7 @@ spec:
     name: app
 ```
 
-Note que *Kind* agora recebe *Service* como valor e nas especificações do serviços tempos: *port* que informa a porta no qual o serviço
+Note que *Kind* agora recebe *Service* como valor e nas especificações dos serviços temos: *port* que informa a porta no qual o serviço
 deve responder, neste caso *80*. Para o serviço se comunicar com os containers da aplicação é informado em *targetPort* a porta onde
 a aplicação de backend está respondendo, temos também o campo *publicIPs* onde podemos informar o ip público para acessar essa a aplicação e por fim o campo *selector* que realiza a associação com o grupo de containers que foram criados para a aplicação.
 
