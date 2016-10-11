@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About
-keywords: infoslack, linux, software, developer, engineer, hacker, devops, docker, kubernetes, aws, ruby, rails, postgresql
+keywords: infoslack, linux, software, developer, engineer, hacker, devops, docker, kubernetes, aws, ruby, rails, postgresql, golang, unikernels
 ---
 
 ![Daniel Romero](/images/daniel.png)

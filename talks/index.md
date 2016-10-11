@@ -1,8 +1,12 @@
 ---
 layout: page
 title: Talks
-keywords: infoslack, linux, software, developer, engineer, hacker, devops, palestras
+keywords: infoslack, linux, software, developer, engineer, hacker, devops, palestras, docker, kubernetes, unikernels, ansible, metasploit
 ---
+
+### 2016
+
+- [RubyConf BR 2016 - Unikernels e o futuro da infraestrutura imutável](https://infoslack.com/unikernels/)
 
 ### 2015
 
