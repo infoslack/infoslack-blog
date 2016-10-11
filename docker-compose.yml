@@ -6,6 +6,7 @@ blog:
     - /data/srv:/srv
     - /data/ansible:/blog/ansible
     - /data/docker:/blog/docker
+    - /data/unikernels:/blog/unikernels
     - /data/metasploit:/blog/metasploit
     - /data/rubyconf2015:/blog/rubyconf2015
     - /data/workshops:/blog/workshops
