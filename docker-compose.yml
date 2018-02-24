@@ -1,7 +1,7 @@
-version: '3.6'
+version: "3"
 services:
   blog:
-    build: .
+    image: infoslack/blog
     container_name: blog
     volumes:
       - /data/ssl/caddy:/root/.caddy
