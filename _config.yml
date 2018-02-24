@@ -11,7 +11,7 @@ title: "root@infoslack:~#"
 destination: ./_site
 url: "https://infoslack.com"
 baseurl: ""
-exclude: [README.md, Dockerfile, docker-compose.yml, Gemfile, Gemfile.lock]
+exclude: [README.md, Dockerfile, docker-compose.yml, Gemfile, Gemfile.lock, .dockerignore, .gitignore]
 
 disqus_shortname: infoslack
 

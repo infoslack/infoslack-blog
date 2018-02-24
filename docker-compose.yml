@@ -1,18 +1,18 @@
-blog:
-  build: .
-  container_name: blog
-  volumes:
-    - /data/ssl/caddy:/root/.caddy
-    - /data/srv:/srv
-    - /data/ansible:/blog/ansible
-    - /data/docker:/blog/docker
-    - /data/unikernels:/blog/unikernels
-    - /data/metasploit:/blog/metasploit
-    - /data/rubyconf2015:/blog/rubyconf2015
-    - /data/workshops:/blog/workshops
-    - /data/caddy:/usr/sbin/caddy
-    - /data/Caddyfile:/etc/Caddyfile
-  ports:
-    - "80:80"
-    - "443:443"
-  command: /usr/sbin/caddy --conf /etc/Caddyfile
+version: '3.6'
+services:
+  blog:
+    build: .
+    container_name: blog
+    volumes:
+      - /data/ssl/caddy:/root/.caddy
+      - /data/cv:/cv
+      - /data/ansible:/blog/ansible
+      - /data/docker:/blog/docker
+      - /data/unikernels:/blog/unikernels
+      - /data/metasploit:/blog/metasploit
+      - /data/rubyconf2015:/blog/rubyconf2015
+      - /data/workshops:/blog/workshops
+    ports:
+      - "80:80"
+      - "443:443"
+    command: /usr/bin/caddy --conf /etc/Caddyfile --log stdout

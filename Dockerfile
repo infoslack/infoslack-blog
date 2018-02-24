@@ -1,8 +1,9 @@
-FROM alpine:latest
-RUN apk upgrade --no-cache --available \
-      && apk add --no-cache \
-      ca-certificates \
-      openssl \
-      && rm -rf /var/cache/apk/*
+FROM ruby:2.5.0-alpine as build-stage
+RUN apk add --update build-base py-pygments
+ADD . /app
+WORKDIR /app
+RUN bundle install
+RUN jekyll build
 
-ADD _site /blog
+FROM infoslack/caddy
+COPY --from=build-stage /app/_site /blog
