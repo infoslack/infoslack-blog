@@ -1,30 +1,26 @@
 ---
 layout: page
 title: About
-keywords: infoslack, linux, software, developer, engineer, hacker, devops, docker, kubernetes, aws, ruby, rails, postgresql, golang, unikernels
+keywords: infoslack, linux, software, developer, engineer, sre, devops, docker, kubernetes, aws, gke, ruby, rails, postgresql, golang, unikernels, ansible, terraform
 ---
 
 ![Daniel Romero](/images/daniel.png)
 
 ## Hi! I'm Daniel Romero.
 
-I'm a developer, technical writer and currently working with DevOps.
-It has been 12 years since I felt in love with Linux and, while that I
-had the opportunity to work as a developer doing PHP, Java and Ruby.
+I'm a developer, technical writer, speaker and currently SRE.
 
-See more at: [infoslack.pro](http://infoslack.pro)
+20 ago I started my career as Sysadmin, I worked several years configuring and maintaining bare-metal Linux servers.
+I've also closely followed the arrival of virtualization in servers and later the process of containerization.
 
-Some of my recent achievements include writing
-[my second book](https://www.casadocodigo.com.br/products/livro-docker)
-and being invited to deliver a [presentation]({{ site.rubyconf }}) about
-Docker Containers at [RubyConf Brazil](http://www.rubyconf.com.br/en/speakers).
+During this journey I acquired new skills that gave me the opportunity to work as a software engineer with PHP, Java, Ruby and Go. In addition I worked for a few years with pentest focused on web application security.
 
-### More about me
+Over the years I've kept myself updated and embraced the DevOps culture, working later with many tools like: Ansible, Terraform, Docker, Kubernetes, etc.
+
+See more here => [infoslack.pro](http://infoslack.pro)
+
+### Follow me
 
 [Twitter]({{ site.twitter }}) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 [Github]({{ site.github }}) &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 [Linkedin]({{ site.linkedin }})
-
-### Contact
-
-[infoslack@gmail.com](mailto:infoslack@gmail.com) &nbsp;|&nbsp; **For privacy:** [GPG key](/about/gpg-key.txt)
