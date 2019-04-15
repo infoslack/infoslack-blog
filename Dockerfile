@@ -1,8 +1,7 @@
-FROM ruby:2.5.0-alpine as build-stage
-RUN apk add --update build-base py-pygments
+FROM ruby:2.6.2 as build-stage
 ADD . /app
 WORKDIR /app
-RUN bundle install
+RUN gem install bundler && bundle install
 RUN bundle exec jekyll build
 
 FROM infoslack/caddy
