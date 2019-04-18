@@ -92,4 +92,97 @@ No gerenciamento de processos existe também a necessidade de compartilhar a CPU
 entre as threads ativas. O kernel implementa um algoritmo de agendamento que opera
 em tempo constante, independentemente do número de threads que disputam a CPU.
 
-WIP
+#### MM
+
+O subsistema de gerenciamento de memória do Linux é responsável, como o nome
+indica, pelo gerenciamento da memória no sistema, isso inclui a implementação
+de memória virtual e paginação por demanda (cada página com tamanho de 4KB,
+na maioria das arquiteturas), alocação de memória para estruturas internas do
+kernel e programas no espaço do usuário e muitas outras coisas.
+
+O esquema de gerenciamento de memória usa buffers de 4KB como base, mas mantém
+o controle de quais páginas estão cheias, parcialmente usadas e vazias.
+Permitindo que o esquema cresça e diminua dinamicamente com base nas necessidades do sistema.
+
+Há momentos em que a memória disponível pode ser esgotada, por esse motivo, as
+páginas podem ser movidas para fora da memória sendo alocadas em disco.
+Esse processo é chamado de `swap` porque as páginas são trocadas da memória
+para o disco rígido. Este é um assunto complexo e merece um post separado ;)
+
+#### VFS
+
+![Virtual File System](/images/linux-vfs.png)
+
+O sistema de arquivos virtual (VFS) é um aspecto interessante do kernel do
+Linux, pois fornece uma abstração de interface comum para sistemas de arquivos.
+O VFS fornece uma camada de comutação entre o SCI e os sistemas de arquivos
+suportados pelo kernel.
+
+No VFS, existe uma abstração comum de API de funções como abrir, fechar, ler e
+gravar arquivos. Em seguida estão as abstrações do sistema de arquivos que definem
+como as funções da camada superior são implementadas.
+São plugins para o sistema de arquivos fornecido.
+
+Além disso, o Linux fornece o sistema de arquivos `/proc`, que consiste em um
+conjunto de diretórios e arquivos montados sob o diretório `/proc`.
+Este é um sistema de arquivos virtual que fornece uma interface para estruturas
+de dados do kernel que se parece com arquivos e diretórios em um sistema de arquivos comum.
+
+Isso fornece um mecanismo fácil para visualizar e alterar vários atributos do
+sistema exibindo um conjunto de diretórios com nomes no formato `/proc/PID`,
+onde o `PID` é o `ID` de um processo. Com isso é possível visualizar informações
+sobre cada processo em execução no sistema.
+Geralmente o conteúdo de `/proc` está em formato de texto legível e um programa
+pode simplesmente abrir, ler ou gravar no arquivo desejado.
+
+Abaixo da camada do sistema de arquivos temos o cache de buffer, que fornece
+um conjunto de funções para a camada do sistema de arquivos.
+Essa camada de armazenamento em cache otimiza o acesso aos dispositivos físicos
+mantendo os dados por um curto período de tempo.
+
+Logo abaixo do cache de buffer estão os drivers de dispositivo, que implementam
+a interface para o dispositivo físico específico.
+
+#### Network Stack
+
+A pilha de rede, por padrão, segue uma arquitetura em camadas modelada após os
+próprios protocolos. Lembrando que o Protocolo da Internet (IP) é o protocolo
+da camada de rede básica que fica abaixo do protocolo de transporte ou Protocolo
+de Controle de Transmissão (TCP).
+
+Acima de TCP temos a camada de sockets, que é chamada por meio do SCI. A camada
+de sockets é a API padrão para o subsistema de rede e fornece uma interface de
+usuário para uma variedade de protocolos de rede. Desde o acesso as data units
+do protocolo IP (PDUs) e até o TCP e o UDP, a camada de sockets fornece uma
+maneira padronizada de gerenciar conexões e mover dados entre endpoints.
+
+#### DD
+
+A maior parte do código fonte do Kernel Linux é composta de drivers de
+dispositivos que tornam um determinado dispositivo de hardware utilizável.
+
+A estrutura de diretórios nos fontes do Linux fornece um subdiretório de drivers
+que é dividido pelos vários dispositivos suportados, como Bluetooth, USB,
+serial e assim por diante.
+
+#### ARCH
+
+Embora a maior parte do Linux seja independente da arquitetura na qual ele é
+executado, existem elementos que precisam considerar a arquitetura em uso para
+operações eficiêntes. O subdiretório `/arch` define a parte dependente da
+arquitetura contida em vários subdiretórios específicos formando o `BSP`.
+
+Geralmente o diretório `x86` é usado. Cada subdiretório de arquitetura contém
+vários outros subdiretórios que se concentram em um aspecto específico do kernel,
+como inicialização, gerenciamento de memória, virtualização e outros.
+
+### Conclusão
+
+Até agora vimos vários conceitos fundamentais e limitados relacionados ao
+funcionamento do Kernel Linux. Nos próximos posts tentarei aprofundar um pouco
+mais em cada parte que vimos até agora.
+
+### Referências
+
+- [https://nostarch.com/tlpi](https://nostarch.com/tlpi)
+- [https://www.kernel.org/doc/html/latest/admin-guide/mm/index.html](https://www.kernel.org/doc/html/latest/admin-guide/mm/index.html)
