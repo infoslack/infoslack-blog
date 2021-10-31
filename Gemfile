@@ -5,3 +5,5 @@ gem "rdiscount"
 gem "pygments.rb"
 gem "jekyll"
 gem "jekyll-gist"
+
+gem "webrick", :group => :development

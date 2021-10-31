@@ -1,4 +1,4 @@
-FROM ruby:2.6.2 as build-stage
+FROM ruby:3.0.2 as build-stage
 ADD . /app
 WORKDIR /app
 RUN gem install bundler && bundle install
