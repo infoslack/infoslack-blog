@@ -4,15 +4,15 @@ services:
     image: infoslack/blog
     container_name: blog
     volumes:
-      - /data/ssl/caddy:/root/.caddy
-      - /data/cv:/cv
-      - /data/ansible:/blog/ansible
-      - /data/docker:/blog/docker
-      - /data/unikernels:/blog/unikernels
-      - /data/metasploit:/blog/metasploit
-      - /data/rubyconf2015:/blog/rubyconf2015
-      - /data/workshops:/blog/workshops
+      - /home/infoslack/data/ssl/caddy:/root/.caddy
+      - /home/infoslack/data/cv:/cv
+      - /home/infoslack/data/ansible:/blog/ansible
+      - /home/infoslack/data/docker:/blog/docker
+      - /home/infoslack/data/unikernels:/blog/unikernels
+      - /home/infoslack/data/metasploit:/blog/metasploit
+      - /home/infoslack/data/rubyconf2015:/blog/rubyconf2015
+      - /home/infoslack/data/workshops:/blog/workshops
     ports:
       - "80:80"
       - "443:443"
-    command: /usr/bin/caddy --conf /etc/Caddyfile --log stdout
+    command: /usr/bin/caddy run -config /etc/Caddyfile
