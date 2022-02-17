@@ -99,7 +99,7 @@ DEPENDENCIES
   pygments.rb
   rake
   rdiscount
-  webrick (~> 1.7)
+  webrick
 
 BUNDLED WITH
    2.2.22
